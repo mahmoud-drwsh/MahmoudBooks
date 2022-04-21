@@ -6,6 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -16,17 +17,17 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.mahmoud_darwish.api_service.test", appContext.packageName)
+    lateinit var service: Service
+
+    @Before
+    fun prepareRetrofitInstance() {
+        service = getInstance()
     }
 
     @Test
     fun apiReturnsANonEmptyListOfResults() {
         runBlocking {
-            val search = getInstance().search("kotlin")
+            val search = service.search("kotlin")
 
             // assert the Volumes list is not empty
             assertTrue(search.Volumes.isNotEmpty())
@@ -49,11 +50,9 @@ class ExampleInstrumentedTest {
             "Xje2DwAAQBAJ" to "Mastering Kotlin",
         )
 
-        val instance = getInstance()
-
         runBlocking {
             for (book in books) {
-                val volume = instance.volume(book.key)
+                val volume = service.volume(book.key)
 
                 assertEquals(book.value, volume.volumeInfo.title)
 
