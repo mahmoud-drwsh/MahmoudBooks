@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 data class VolumesSearchResult(
     @SerializedName("items")
-    val items: List<Item> = listOf(),
+    val Volumes: List<Volume> = listOf(),
     @SerializedName("kind")
     val kind: String = "",
     @SerializedName("totalItems")
     val totalItems: Int = 0
 ) {
-    data class Item(
+    data class Volume(
         @SerializedName("accessInfo")
         val accessInfo: AccessInfo = AccessInfo(),
         @SerializedName("etag")
