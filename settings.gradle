@@ -14,4 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "GBooks"
 include ':app'
-include ':api_service'
+include ':data'
+include ':domain'
+include ':presentation'
