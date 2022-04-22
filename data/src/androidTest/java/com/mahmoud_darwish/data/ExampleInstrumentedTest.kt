@@ -1,7 +1,8 @@
-package com.mahmoud_darwish.api_service
+package com.mahmoud_darwish.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
+import com.mahmoud_darwish.data.remote.Service
+import com.mahmoud_darwish.data.remote.getInstance
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -25,24 +26,21 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun apiReturnsANonEmptyListOfResults() {
-        runBlocking {
-            val search = service.search("kotlin")
+    fun apiReturnsANonEmptyListOfResults() = runBlocking {
+        val search = service.search("kotlin")
 
-            // assert the Volumes list is not empty
-            assertTrue(search.Volumes.isNotEmpty())
+        // assert the volumeDtos list is not empty
+        assertTrue(search.volumeDtos.isNotEmpty())
 
-            // assert all books have titles
-            assertTrue(search.Volumes.all { it.volumeInfo.title.isNotBlank() })
-        }
+        // assert all books have valid ID's
+        assertTrue(search.volumeDtos.all { it.id.isNotBlank() })
     }
 
     @Test
-    fun apiReturnsRightVolume() {
+    fun apiReturnsRightVolume() = runBlocking {
         /*
         The following books will be requested from the API and will be ensured that the titles match the ID's
         * */
-
         val books: Map<String, String> = mapOf(
             /*      ID               Title       */
             "qtcIkAEACAAJ" to "Kotlin in Action",
@@ -50,15 +48,14 @@ class ExampleInstrumentedTest {
             "Xje2DwAAQBAJ" to "Mastering Kotlin",
         )
 
-        runBlocking {
-            for (book in books) {
-                val volume = service.volume(book.key)
+        for (book in books) {
+            val volume = service.volume(book.key)
 
-                assertEquals(book.value, volume.volumeInfo.title)
+            assertEquals(book.value, volume.volumeInfoDto.title)
 
-                // The delay is for not letting the server think it's being attacked :)
-                delay(500)
-            }
+            // The delay is for not letting the server think it's being attacked :)
+            val subsequentRequestDelayTime: Long = 500
+            delay(subsequentRequestDelayTime)
         }
     }
 }

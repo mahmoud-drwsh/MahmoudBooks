@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.api_service
+package com.mahmoud_darwish.data
 
 import org.junit.Test
 

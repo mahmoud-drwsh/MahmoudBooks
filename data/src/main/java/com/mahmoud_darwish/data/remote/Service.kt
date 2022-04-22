@@ -1,6 +1,6 @@
-package com.mahmoud_darwish.api_service
+package com.mahmoud_darwish.data.remote
 
-import com.mahmoud_darwish.api_service.model.VolumesSearchResult
+import com.mahmoud_darwish.data.model.remote.VolumesSearchResultDto
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -16,12 +16,13 @@ interface Service {
         @Query(Q_PARAM) q: String,
         @Query(Q_MAX_RESULTS) maxResults: Int = Q_MAX_RESULTS_DEFAULT_ARG,
         @Query(Q_PRINT_TYPE) printType: String = Q_PRINT_TYPE_DEFAULT_ARG
-    ): VolumesSearchResult
+    ): VolumesSearchResultDto
 
     @GET("$VOLUMES_PATH/{id}")
     suspend fun volume(
         @Path("id") id: String
-    ): VolumesSearchResult.Volume
+    ): VolumesSearchResultDto.VolumeDto
+
 }
 
 /**

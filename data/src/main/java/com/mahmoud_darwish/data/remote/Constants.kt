@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.api_service
+package com.mahmoud_darwish.data.remote
 
 
 const val BASE = "https://www.googleapis.com/books/v1/"
