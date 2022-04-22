@@ -14,8 +14,9 @@ interface Service {
     @GET(VOLUMES_PATH)
     suspend fun search(
         @Query(Q_PARAM) q: String,
-        @Query(Q_MAX_RESULTS) maxResults: Int = Q_MAX_RESULTS_DEFAULT_ARG,
-        @Query(Q_PRINT_TYPE) printType: String = Q_PRINT_TYPE_DEFAULT_ARG
+        @Query(MAX_RESULTS_PARAM) maxResults: Int = MAX_RESULTS_PARAM_DEFAULT_ARG,
+        @Query(PRINT_TYPE_PARAM) printType: String = PRINT_TYPE_PARAM_DEFAULT_ARG,
+        @Query(FILTER_PARAM) filter: String = FILTER_PARAM_DEFAULT_ARG
     ): VolumesSearchResultDto
 
     @GET("$VOLUMES_PATH/{id}")

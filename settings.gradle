@@ -1,7 +1,7 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
+        gradlePluginPortal()
         mavenCentral()
     }
 }
@@ -16,3 +16,4 @@ rootProject.name = "GBooks"
 include ':app'
 include ':data'
 include ':domain'
+include ':presentation'
