@@ -17,7 +17,7 @@ const val PRINT_TYPE_PARAM_DEFAULT_ARG = "books"
 
 // filter parameter
 const val FILTER_PARAM = "filter"
-const val FILTER_PARAM_DEFAULT_ARG = "free-ebooks"
+const val FILTER_PARAM_DEFAULT_ARG = "paid-ebooks"
 
 // API key
 const val API_KEY = "AIzaSyCOBYgJhmtpkoxKN5UJtUxL_rinR4-ddRI"

@@ -3,33 +3,23 @@ package com.mahmoud_darwish.gbooks
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import com.mahmoud_darwish.presentation.Home
-import com.mahmoud_darwish.presentation.ui.theme.GBooksTheme
+import com.mahmoud_darwish.presentation.NavGraphs
+import com.mahmoud_darwish.presentation.ui.theme.MahmoudBooksTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
-            GBooksTheme {
-                Scaffold(
-                    topBar = { HomeTopBar() }
-                ) { }
+            MahmoudBooksTheme {
+                DestinationsNavHost(navGraph = NavGraphs.root)
             }
         }
     }
-
 }
 
-@Composable
-fun HomeTopBar() {
-    TopAppBar(
-        title = {
-            Text(text = "GBooks")
-        }
-    )
-}
+
