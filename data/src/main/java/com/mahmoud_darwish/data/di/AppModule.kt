@@ -3,7 +3,7 @@ package com.mahmoud_darwish.data.di
 import android.app.Application
 import androidx.room.Room
 import com.mahmoud_darwish.data.local.VolumeRoomDatabase
-import com.mahmoud_darwish.data.local.model.VolumeEntityDao
+import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.remote.getBooksServiceInstance
 import com.mahmoud_darwish.data.repository.BooksRepositoryImpl
