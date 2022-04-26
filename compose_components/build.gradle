@@ -19,9 +19,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-        vectorDrawables {
-            useSupportLibrary true
-        }
     }
 
     buildTypes {
@@ -59,10 +56,8 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":compose_components"))
-    // although the data module is added as a dependency here, none of its concrete classes are accessed directly in the code.
-    implementation(project(":data"))
 }
+
 
 apply from: "../build_shared_dependencies.gradle"
 apply from: "../build_shared_dependencies_compose.gradle"
