@@ -10,6 +10,4 @@ data class VolumeSearchDto(
     val kind: String = "",
     @SerializedName("totalItems")
     val totalItems: Int = 0
-) {
-}
-
+)
