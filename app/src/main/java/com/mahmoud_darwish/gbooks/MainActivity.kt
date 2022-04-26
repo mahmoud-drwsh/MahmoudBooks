@@ -15,9 +15,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MahmoudBooksTheme {
-                DestinationsNavHost(navGraph = NavGraphs.root)
-            }
+            DestinationsNavHost(navGraph = NavGraphs.root)
         }
     }
 }
