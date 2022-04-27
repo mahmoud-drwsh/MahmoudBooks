@@ -19,3 +19,12 @@ fun VolumeDto.toVolume(): Volume = Volume(
     rating = volumeInfo.averageRating,
     reviewsNumber = volumeInfo.ratingsCount,
 )
+
+fun List<VolumeDto>.toVolumeList(): List<Volume> = mapNotNull { volumeDto ->
+    // a try clause is used in order to avoid crashing the app in case a volume dto can't be mapped to a volume model
+    try {
+        volumeDto.toVolume()
+    } catch (e: Exception) {
+        null
+    }
+}

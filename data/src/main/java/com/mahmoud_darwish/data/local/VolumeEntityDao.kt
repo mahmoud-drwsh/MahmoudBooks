@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface VolumeEntityDao {
     @Query("SELECT * FROM VolumeEntity")
-    fun getAllChached(): Flow<List<VolumeEntity>>
+    suspend fun getAllCached(): List<VolumeEntity>
+
+    @Query("SELECT * FROM VolumeEntity WHERE id = :id LIMIT 1")
+    suspend fun getVolume(id: String): VolumeEntity
 
     @Query("DELETE FROM VolumeEntity")
     suspend fun clearCache()
@@ -19,5 +22,5 @@ interface VolumeEntityDao {
     suspend fun insert(volumes: List<VolumeEntity>)
 
     @Query("SELECT * FROM VolumeEntity WHERE LOWER(title) LIKE '%' || LOWER(:title) || '%' OR LOWER(title) = lOWER(:title)")
-    fun volumeSearch(title: String): Flow<List<VolumeEntity>>
+    suspend fun volumeSearch(title: String): List<VolumeEntity>
 }

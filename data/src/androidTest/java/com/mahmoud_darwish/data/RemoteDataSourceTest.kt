@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class RemoteDataSourceTest {
     lateinit var googleBooksApi: GoogleBooksApi
 
     @Before

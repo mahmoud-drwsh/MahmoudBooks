@@ -6,8 +6,8 @@ import com.mahmoud_darwish.data.local.VolumeRoomDatabase
 import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.remote.getBooksServiceInstance
-import com.mahmoud_darwish.data.repository.BooksRepositoryImpl
-import com.mahmoud_darwish.domain.repository.IBooksRepository
+import com.mahmoud_darwish.data.repository.VolumeSearchRepositoryImpl
+import com.mahmoud_darwish.domain.repository.IVolumeSearchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +19,7 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideBooksRepository(booksRepositoryImpl: BooksRepositoryImpl): IBooksRepository =
+    fun provideBooksRepository(booksRepositoryImpl: VolumeSearchRepositoryImpl): IVolumeSearchRepository =
         booksRepositoryImpl
 
     @Provides
