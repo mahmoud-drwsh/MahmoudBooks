@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mahmoud_darwish.compose_components.theme.loadingIndicatorSize
 import com.mahmoud_darwish.domain.util.Resource
+import com.mahmoud_darwish.domain.util.Source
 
 @Composable
 fun <T> Resource<T>.ResourceComposable(
@@ -20,9 +21,9 @@ fun <T> Resource<T>.ResourceComposable(
     onError: @Composable (message: String) -> Unit = { message ->
         CenteredText(message = message)
     },
-    onSuccess: @Composable (data: T) -> Unit
+    onSuccess: @Composable (data: T, source: Source, message: String?) -> Unit
 ) = when (this) {
-    is Resource.Success -> onSuccess(data)
+    is Resource.Success -> onSuccess(data, source, message)
     is Resource.Loading -> onLoading()
     is Resource.Error -> onError(message)
 }
