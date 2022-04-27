@@ -33,7 +33,7 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     override val searchResult: MutableStateFlow<Resource<List<Volume>>> =
         MutableStateFlow(Resource.Loading)
 
-    private val queryString: MutableStateFlow<String> = MutableStateFlow("")
+    private val queryString: MutableStateFlow<String> = MutableStateFlow("kotlin")
 
     override val query: StateFlow<String> = queryString
 
@@ -49,6 +49,14 @@ class VolumeSearchRepositoryImpl @Inject constructor(
                 return@launch
             }
 
+            searchResult.value = Resource.Loading
+
+            val emitSuccess = { success: Resource.Success<List<Volume>> ->
+                searchResult.value =
+                    if (success.data.isEmpty()) Resource.Error("No results were found")
+                    else success
+            }
+
             try {
                 // searching with the Google books service
                 val volumesToCache =
@@ -56,18 +64,22 @@ class VolumeSearchRepositoryImpl @Inject constructor(
                 // caching the results
                 volumeEntityDao.insert(volumesToCache)
                 // emitting the results after caching them to adhere to the single source of truth principle
-                searchResult.value = Resource.Success(
-                    volumeEntityDao.volumeSearch(newQuery).toVolumeList(), Source.REMOTE
+                emitSuccess(
+                    Resource.Success(
+                        volumeEntityDao.volumeSearch(newQuery).toVolumeList(), Source.REMOTE
+                    )
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
 
                 // loading data from the local cache
                 val volumeSearch = volumeEntityDao.volumeSearch(newQuery)
-                searchResult.value = Resource.Success(
-                    volumeSearch.toVolumeList(),
-                    Source.CACHE,
-                    "Due to network related issues, the results below are from the cache."
+                emitSuccess(
+                    Resource.Success(
+                        volumeSearch.toVolumeList(),
+                        Source.CACHE,
+                        "Due to network related issues, the results below are from the cache."
+                    )
                 )
             }
         }

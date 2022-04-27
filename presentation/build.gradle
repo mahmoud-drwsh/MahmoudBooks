@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 
     // Compose navigation library
-    id 'com.google.devtools.ksp' version '1.6.20-1.0.5' // Depends on your kotlin version
+    id 'com.google.devtools.ksp' version '1.6.10-1.0.4' // Depends on your kotlin version
 
     // Hilt
     id 'kotlin-kapt'
