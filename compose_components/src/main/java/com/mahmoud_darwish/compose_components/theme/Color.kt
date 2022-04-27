@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.presentation.ui.theme
+package com.mahmoud_darwish.compose_components.theme
 
 import androidx.compose.ui.graphics.Color
 
