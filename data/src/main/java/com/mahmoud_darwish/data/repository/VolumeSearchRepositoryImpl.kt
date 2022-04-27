@@ -25,7 +25,6 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     private val scope: CoroutineScope = CoroutineScope(Job() + IO)
     private var job: Job? = null
 
-
     init {
         performSearch()
     }
@@ -33,65 +32,102 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     override val searchResult: MutableStateFlow<Resource<List<Volume>>> =
         MutableStateFlow(Resource.Loading)
 
-    private val queryString: MutableStateFlow<String> = MutableStateFlow("kotlin")
+    private val _queryString: MutableStateFlow<String> = MutableStateFlow("kotlin")
+    override val query: StateFlow<String> = _queryString
 
-    override val query: StateFlow<String> = queryString
-
+    /*
+     * below, the program will try to search the cache, then if results were not found,
+     * the program will request from the server.
+     * The program works like this to reduce the number of calls made to the server.
+     *
+     * The pseudo-code:
+     * 1. if the query string is empty emit an error state.
+     * 2. search the cache and emit the results is any are found.
+     * 3. if no cached results were found, send a search request to the server.
+     * 4. emit the returned results from the server after caching them.
+     * 5. emit an error with a message explaining that no results were found.
+     * */
     private fun performSearch() {
         job?.cancel()
         job = scope.launch {
             delay(500L)
 
-            val newQuery = query.value
+            val newQuery = prepareSearchQueryString()
 
             if (newQuery.isBlank()) {
-                searchResult.value = Resource.Error("Please enter a title to search for")
+                emitError("Please enter a title to search for")
                 return@launch
             }
 
-            searchResult.value = Resource.Loading
-
-            val emitSuccess = { success: Resource.Success<List<Volume>> ->
-                searchResult.value =
-                    if (success.data.isEmpty()) Resource.Error("No results were found")
-                    else success
-            }
+            emitLoading()
 
             try {
-                // searching with the Google books service
-                val volumesToCache =
-                    service.search(newQuery).items.toVolumeList().toVolumeEntityList()
-                // caching the results
-                volumeEntityDao.insert(volumesToCache)
-                // emitting the results after caching them to adhere to the single source of truth principle
-                emitSuccess(
-                    Resource.Success(
-                        volumeEntityDao.volumeSearch(newQuery).toVolumeList(), Source.REMOTE
-                    )
-                )
+                val cachedResults = getCachedResults(newQuery)
+
+                if (cachedResults.isNotEmpty())
+                    emitCachedResults(cachedResults)
+                else {
+                    loadAndCacheNewResults(newQuery)
+                    emitNewlyCachedResults(newQuery)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
 
-                // loading data from the local cache
-                val volumeSearch = volumeEntityDao.volumeSearch(newQuery)
-                emitSuccess(
-                    Resource.Success(
-                        volumeSearch.toVolumeList(),
-                        Source.CACHE,
-                        "Due to network related issues, the results below are from the cache."
-                    )
-                )
+                emitError(e.message)
             }
         }
     }
 
     override fun setSearchQuery(title: String) {
-        queryString.value = title
+        _queryString.value = title.lowercase()
         performSearch()
     }
 
-    // since the search results are always cached, when a user wants to view a specific volume, it can just be obtained from the cache.
+    /*
+    * Since all the requested results will be cached, when a user wants to view a specific volume,
+    * the volume can be found in the cache.
+    * */
     override fun getVolumeById(id: String): Flow<Resource<Volume>> = flow {
         volumeEntityDao.getVolume(id)
     }
+
+    private suspend fun getCachedResults(query: String) =
+        volumeEntityDao.volumeSearch(query).toVolumeList()
+
+    private fun emitCachedResults(cachedResults: List<Volume>) {
+        searchResult.value = Resource.Success(cachedResults, Source.CACHE)
+    }
+
+    private suspend fun loadAndCacheNewResults(newQuery: String) {
+        // searching with the Google books service
+        val volumesToCache =
+            service.search(newQuery).items.toVolumeList().toVolumeEntityList()
+        // caching the results
+        volumeEntityDao.insert(volumesToCache)
+    }
+
+    private suspend fun emitNewlyCachedResults(
+        newQuery: String
+    ) {
+        // emitting the results after caching them to adhere to the single source of truth principle
+        val success = Resource.Success(
+            volumeEntityDao.volumeSearch(newQuery).toVolumeList(), Source.REMOTE
+        )
+        searchResult.value = if (success.data.isEmpty()) Resource.Error("No results were found")
+        else success
+    }
+
+    private fun emitError(message: String?) {
+        searchResult.value = Resource.Error(message ?: "An unexpected error occurred")
+    }
+
+    private fun emitSuccess(success: Resource.Success<List<Volume>>) {
+        searchResult.value = success
+    }
+
+    private fun emitLoading() {
+        searchResult.value = Resource.Loading
+    }
+
+    private fun prepareSearchQueryString() = query.value.trim().lowercase()
 }
