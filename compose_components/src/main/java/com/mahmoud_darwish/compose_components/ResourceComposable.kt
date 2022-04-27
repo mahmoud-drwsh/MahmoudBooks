@@ -1,9 +1,11 @@
 package com.mahmoud_darwish.compose_components
 
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.mahmoud_darwish.compose_components.theme.loadingIndicatorSize
 import com.mahmoud_darwish.domain.util.Resource
 

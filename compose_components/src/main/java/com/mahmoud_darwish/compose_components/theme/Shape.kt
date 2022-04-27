@@ -9,3 +9,7 @@ val Shapes = Shapes(
     medium = RoundedCornerShape(4.dp),
     large = RoundedCornerShape(0.dp)
 )
+
+val imageShape = RoundedCornerShape(18.dp)
+
+val imageHeight = 300.dp
