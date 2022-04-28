@@ -9,5 +9,6 @@ interface IVolumeSearchRepository {
     fun setSearchQuery(title: String)
     val searchResult: Flow<Resource<List<Volume>>>
     val query: StateFlow<String>
-    fun getVolumeById(id: String): Flow<Resource<Volume>>
+    suspend fun getVolumeById(id: String): Volume
+    fun forceLoadingFromServer()
 }

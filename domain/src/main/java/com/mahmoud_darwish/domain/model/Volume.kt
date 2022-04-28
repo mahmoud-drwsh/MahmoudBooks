@@ -11,5 +11,6 @@ data class Volume(
     val pages: Int,
     val rating: Double = 0.0,
     val reviewsNumber: Int = 0,
-    val categories: List<String>
+    val categories: List<String>,
+    val infoLink: String
 )
