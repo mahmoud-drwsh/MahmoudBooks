@@ -1,7 +1,9 @@
 package com.mahmoud_darwish.data.repository
 
+import com.mahmoud_darwish.data.R
 import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.mapper.toVolume
+import com.mahmoud_darwish.data.util.UiText
 import com.mahmoud_darwish.domain.model.Volume
 import com.mahmoud_darwish.domain.repository.ISingleVolumeRepository
 import com.mahmoud_darwish.domain.util.Resource
@@ -14,7 +16,8 @@ import javax.inject.Singleton
 
 @Singleton
 class SingleVolumeRepositoryImpl @Inject constructor(
-    private val dao: VolumeEntityDao
+    private val dao: VolumeEntityDao,
+    private val uiText: UiText,
 ) : ISingleVolumeRepository {
 
     private val idString: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -27,7 +30,7 @@ class SingleVolumeRepositoryImpl @Inject constructor(
         emit(Resource.Loading)
         val resource: Resource<Volume> =
             if (it != null) Resource.Success(dao.getVolume(it).toVolume(), Source.CACHE)
-            else Resource.Error("The volume you're looking for was not found")
+            else Resource.Error(uiText.noResultsFoundInCacheErrorMessage)
         emit(resource)
     }
 }

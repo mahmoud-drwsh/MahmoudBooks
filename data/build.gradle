@@ -38,7 +38,6 @@ dependencies {
 }
 
 dependencies {
-
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     testImplementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -61,5 +60,12 @@ dependencies {
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.0-alpha01"
 }
+
+
+// Preferences DataStore (SharedPreferences like APIs)
+dependencies {
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+}
+
 
 apply from: "../build_shared_dependencies.gradle"

@@ -18,6 +18,7 @@ fun VolumeDto.toVolume(): Volume = Volume(
     pages = volumeInfo.pageCount,
     rating = volumeInfo.averageRating,
     reviewsNumber = volumeInfo.ratingsCount,
+    categories = volumeInfo.categories,
 )
 
 fun List<VolumeDto>.toVolumeList(): List<Volume> = mapNotNull { volumeDto ->

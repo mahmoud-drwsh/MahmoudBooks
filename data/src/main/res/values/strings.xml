@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_results_found_in_cache_error_message">The volume you\'re looking for was not found</string>
+    <string name="initial_search_term">kotlin</string>
+    <string name="search_term_not_entered_error_message">Please enter a title to search for</string>
+    <string name="no_results_found_error">No results were found</string>
+    <string name="unknown_error_message">An unexpected error occurred</string>
+</resources>

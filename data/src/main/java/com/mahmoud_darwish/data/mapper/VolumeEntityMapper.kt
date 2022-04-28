@@ -1,8 +1,6 @@
 package com.mahmoud_darwish.data.mapper
 
 import com.mahmoud_darwish.data.local.model.VolumeEntity
-import com.mahmoud_darwish.data.local.model.toVolume
-import com.mahmoud_darwish.data.remote.model.VolumeDto
 import com.mahmoud_darwish.domain.model.Volume
 
 fun Volume.toVolumeEntity(): VolumeEntity = VolumeEntity(
@@ -16,6 +14,7 @@ fun Volume.toVolumeEntity(): VolumeEntity = VolumeEntity(
     pages = this.pages,
     rating = this.rating,
     reviewsNumber = this.reviewsNumber,
+    categories = this.categories,
 )
 
 
@@ -30,6 +29,7 @@ fun VolumeEntity.toVolume(): Volume = Volume(
     pages = this.pages,
     rating = this.rating,
     reviewsNumber = this.reviewsNumber,
+    categories = this.categories,
 )
 
 
