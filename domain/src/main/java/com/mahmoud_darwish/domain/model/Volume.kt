@@ -10,5 +10,6 @@ data class Volume(
     val price: Int,
     val pages: Int,
     val rating: Double = 0.0,
-    val reviewsNumber: Int = 0
+    val reviewsNumber: Int = 0,
+    val categories: List<String>
 )
