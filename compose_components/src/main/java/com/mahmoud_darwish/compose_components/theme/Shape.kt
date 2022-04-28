@@ -10,6 +10,6 @@ val Shapes = Shapes(
     large = RoundedCornerShape(0.dp)
 )
 
-val imageShape = RoundedCornerShape(32.dp)
+val imageShape = RoundedCornerShape(16.dp)
 
-val imageHeight = 300.dp
+val imageHeight = 200.dp
