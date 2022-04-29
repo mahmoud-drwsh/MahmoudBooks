@@ -1,7 +1,7 @@
 package com.mahmoud_darwish.gbooks
 
-import android.app.Application
+import com.google.android.play.core.splitcompat.SplitCompatApplication
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class App : Application()
+class App : SplitCompatApplication()

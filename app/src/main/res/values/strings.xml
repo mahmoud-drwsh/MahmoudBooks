@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">MahmoudBooks</string>
-    <string name="title_favorites">My favorites</string>
+    <string name="title_favorites">favorites</string>
 </resources>
