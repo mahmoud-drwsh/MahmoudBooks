@@ -9,9 +9,6 @@ import javax.inject.Singleton
 class ISettingsRepositoryImpl @Inject constructor(
     private val dao: VolumeEntityDao
 ) : ISettingsRepository {
-    override suspend fun clearCache() {
-        dao.clearCache()
-    }
 
 
 }

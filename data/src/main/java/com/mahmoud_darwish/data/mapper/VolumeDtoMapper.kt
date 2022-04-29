@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.data.local.model
+package com.mahmoud_darwish.data.mapper
 
 import com.mahmoud_darwish.data.remote.model.VolumeDto
 import com.mahmoud_darwish.domain.model.Volume
@@ -19,6 +19,7 @@ fun VolumeDto.toVolume(): Volume = Volume(
     rating = volumeInfo.averageRating,
     reviewsNumber = volumeInfo.ratingsCount,
     categories = volumeInfo.categories,
+    infoLink = volumeInfo.infoLink,
 )
 
 fun List<VolumeDto>.toVolumeList(): List<Volume> = mapNotNull { volumeDto ->

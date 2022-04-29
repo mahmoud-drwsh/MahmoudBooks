@@ -1,6 +1,5 @@
 package com.mahmoud_darwish.data.repository
 
-import com.mahmoud_darwish.data.R
 import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.mapper.toVolume
 import com.mahmoud_darwish.data.util.UiText
@@ -29,7 +28,7 @@ class SingleVolumeRepositoryImpl @Inject constructor(
     override val searchResult: Flow<Resource<Volume>> = idString.transform { it ->
         emit(Resource.Loading)
         val resource: Resource<Volume> =
-            if (it != null) Resource.Success(dao.getVolume(it).toVolume(), Source.CACHE)
+            if (it != null) Resource.Success(dao.getVolumeEntity(it).toVolume(), Source.CACHE)
             else Resource.Error(uiText.noResultsFoundInCacheErrorMessage)
         emit(resource)
     }

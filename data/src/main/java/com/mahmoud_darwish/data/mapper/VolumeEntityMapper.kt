@@ -15,6 +15,7 @@ fun Volume.toVolumeEntity(): VolumeEntity = VolumeEntity(
     rating = this.rating,
     reviewsNumber = this.reviewsNumber,
     categories = this.categories,
+    infoLink = this.infoLink,
 )
 
 
@@ -30,6 +31,7 @@ fun VolumeEntity.toVolume(): Volume = Volume(
     rating = this.rating,
     reviewsNumber = this.reviewsNumber,
     categories = this.categories,
+    infoLink = this.infoLink,
 )
 
 

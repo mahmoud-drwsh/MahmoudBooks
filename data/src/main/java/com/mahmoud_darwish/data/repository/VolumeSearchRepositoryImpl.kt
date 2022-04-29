@@ -1,9 +1,10 @@
 package com.mahmoud_darwish.data.repository
 
+import com.mahmoud_darwish.data.di.AppIOCoroutineScope
 import com.mahmoud_darwish.data.local.VolumeEntityDao
-import com.mahmoud_darwish.data.local.model.toVolumeList
-import com.mahmoud_darwish.data.mapper.toVolumeEntityList
 import com.mahmoud_darwish.data.mapper.toVolumeList
+import com.mahmoud_darwish.data.mapper.toVolume
+import com.mahmoud_darwish.data.mapper.toVolumeEntityList
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.util.UiText
 import com.mahmoud_darwish.domain.model.Volume
@@ -11,7 +12,6 @@ import com.mahmoud_darwish.domain.repository.IVolumeSearchRepository
 import com.mahmoud_darwish.domain.util.Resource
 import com.mahmoud_darwish.domain.util.Source
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -22,12 +22,15 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     private val service: GoogleBooksApi,
     private val volumeEntityDao: VolumeEntityDao,
     private val uiText: UiText,
+    @AppIOCoroutineScope
+    private val scope: CoroutineScope
 ) : IVolumeSearchRepository {
-
-    private val scope: CoroutineScope = CoroutineScope(Job() + IO)
+    // this is later used to add a delay before a request is sent to Google books API server
+    // to prevent sending too many requests while the user is typing
     private var job: Job? = null
 
     init {
+        // when the repository is first created, a search must be initiated.
         performSearch()
     }
 
@@ -54,29 +57,27 @@ class VolumeSearchRepositoryImpl @Inject constructor(
         job = scope.launch {
             delay(500L)
 
-            val newQuery = prepareSearchQueryString()
-
-            if (newQuery.isBlank()) {
-                emitError(uiText.searchTermNotEnteredErrorMessage)
-                return@launch
+            emitLoadingAndValidateQueryStringOrEmitError { newQuery ->
+                tryLoadingFromCacheOrRemoteIfNoCacheExists(newQuery)
             }
+        }
+    }
 
-            emitLoading()
+    private suspend fun tryLoadingFromCacheOrRemoteIfNoCacheExists(
+        newQuery: String
+    ) {
+        try {
+            val cachedResults = getCachedResults(newQuery)
 
-            try {
-                val cachedResults = getCachedResults(newQuery)
+            if (cachedResults.isNotEmpty())
+                emitResults(Resource.Success(cachedResults, Source.CACHE))
+            else
+                forceLoadingFromServer()
 
-                if (cachedResults.isNotEmpty())
-                    emitCachedResults(cachedResults)
-                else {
-                    loadAndCacheNewResults(newQuery)
-                    emitNewlyCachedResults(newQuery)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
 
-                emitError(e.message)
-            }
+            emitError(e.message)
         }
     }
 
@@ -89,15 +90,38 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     * Since all the requested results will be cached, when a user wants to view a specific volume,
     * the volume can be found in the cache.
     * */
-    override fun getVolumeById(id: String): Flow<Resource<Volume>> = flow {
-        volumeEntityDao.getVolume(id)
+    override suspend fun getVolumeById(id: String): Volume =
+        volumeEntityDao.getVolumeEntity(id).toVolume()
+
+
+    override fun forceLoadingFromServer() {
+        scope.launch {
+            emitLoading()
+
+            emitLoadingAndValidateQueryStringOrEmitError { newQuery ->
+                try {
+                    loadAndCacheNewResults(newQuery)
+                    emitNewlyCachedResults(newQuery)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    emitError(e.message)
+                }
+            }
+        }
     }
 
+    /**
+     * get previously cached results
+     * */
     private suspend fun getCachedResults(query: String) =
         volumeEntityDao.volumeSearch(query).toVolumeList()
 
-    private fun emitCachedResults(cachedResults: List<Volume>) {
-        searchResult.value = Resource.Success(cachedResults, Source.CACHE)
+
+    private fun emitResults(
+        success: Resource.Success<List<Volume>>
+    ) {
+        searchResult.value = success
     }
 
     private suspend fun loadAndCacheNewResults(newQuery: String) {
@@ -108,29 +132,44 @@ class VolumeSearchRepositoryImpl @Inject constructor(
         volumeEntityDao.insert(volumesToCache)
     }
 
+    /**
+     * This is to be called after making request to the server to cache the response.
+     * */
     private suspend fun emitNewlyCachedResults(
         newQuery: String
     ) {
         // emitting the results after caching them to adhere to the single source of truth principle
-        val success = Resource.Success(
-            volumeEntityDao.volumeSearch(newQuery).toVolumeList(), Source.REMOTE
-        )
-        searchResult.value =
-            if (success.data.isEmpty()) Resource.Error(uiText.noResultsFoundError)
-            else success
+        val serverRequestResults = getCachedResults(newQuery)
+        // here the source is considered remote because the data is as fresh as possible.
+        val success = Resource.Success(serverRequestResults, Source.REMOTE)
+
+        emitNewResultsOrErrorIfEmpty(success)
+    }
+
+    private fun emitNewResultsOrErrorIfEmpty(results: Resource.Success<List<Volume>>) {
+        if (results.data.isEmpty()) emitError(uiText.noResultsFoundError)
+        else emitResults(results)
     }
 
     private fun emitError(message: String?) {
         searchResult.value = Resource.Error(message ?: uiText.unknownErrorMessage)
     }
 
-    private fun emitSuccess(success: Resource.Success<List<Volume>>) {
-        searchResult.value = success
-    }
-
     private fun emitLoading() {
         searchResult.value = Resource.Loading
     }
 
-    private fun prepareSearchQueryString() = query.value.trim().lowercase()
+    private suspend fun emitLoadingAndValidateQueryStringOrEmitError(
+        onValidValue: suspend (query: String) -> Unit,
+    ) {
+        emitLoading()
+
+        val queryString = query.value.trim().lowercase()
+
+        if (queryString.isNotBlank()) {
+            onValidValue(queryString)
+        } else {
+            emitError(uiText.searchTermNotEnteredErrorMessage)
+        }
+    }
 }
