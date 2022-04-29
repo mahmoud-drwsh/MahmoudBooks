@@ -57,6 +57,7 @@ class HomeViewModel @Inject constructor(
         is HomeUIEvent.UpdateQuery -> {
             volumeSearchRepo.setSearchQuery(homeUIEvent.query)
         }
+        is HomeUIEvent.ForceLoadingFromServer -> volumeSearchRepo.forceLoadingFromServer()
     }
 }
 
@@ -70,4 +71,5 @@ data class HomeUIState<T>(
 
 sealed class HomeUIEvent() {
     class UpdateQuery(val query: String) : HomeUIEvent()
+    class ForceLoadingFromServer : HomeUIEvent()
 }
