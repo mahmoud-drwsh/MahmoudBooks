@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavoriteEntityDao {
     @Query("SELECT VolumeEntity.* FROM VolumeEntity join Favorite on Favorite.id = VolumeEntity.id")
-    suspend fun getFavorites(): List<VolumeEntity>
+    fun getFavorites(): Flow<List<VolumeEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(favorite: Favorite)

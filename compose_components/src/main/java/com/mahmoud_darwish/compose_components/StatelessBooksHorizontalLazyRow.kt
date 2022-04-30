@@ -44,9 +44,8 @@ fun StatelessBooksHorizontalLazyRow(
                     imageUrl = volume.thumbnailLarge,
                     modifier = Modifier
                         .weight(1f),
-                    onClick = { onItemClick(volume) },
                     contentScale = ContentScale.FillHeight
-                )
+                ) { onItemClick(volume) }
                 Text(
                     text = "${numberFormat.format(volume.price)} IDR",
                     style = MaterialTheme.typography.caption.copy(fontSize = 17.sp)

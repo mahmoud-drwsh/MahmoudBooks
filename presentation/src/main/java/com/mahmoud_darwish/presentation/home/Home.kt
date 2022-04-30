@@ -6,54 +6,64 @@ import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.mahmoud_darwish.compose_components.ResourceComposable
+import com.mahmoud_darwish.compose_components.StatelessBooksHorizontalLazyRow
 import com.mahmoud_darwish.compose_components.theme.mediumPadding
+import com.mahmoud_darwish.domain.model.Volume
 import com.mahmoud_darwish.domain.util.Resource
 import com.mahmoud_darwish.domain.util.Source
+import com.mahmoud_darwish.presentation.NavGraphs
 import com.mahmoud_darwish.presentation.R
 import com.mahmoud_darwish.presentation.destinations.DetailsDestination
-import com.mahmoud_darwish.compose_components.StatelessBooksHorizontalLazyRow
-import com.mahmoud_darwish.domain.model.Volume
-import com.mahmoud_darwish.presentation.shared.HomeBottomBar
+import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
+@Composable
+fun Home() {
+    val navHostController = rememberNavController()
+
+    DestinationsNavHost(navController = navHostController, navGraph = NavGraphs.root)
+}
+
 @Destination(start = true)
 @Composable
-fun Home(
+fun HomeContent(
     navigator: DestinationsNavigator,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-    Scaffold(
-        bottomBar = { HomeBottomBar() }
-    ) {
-        Column(Modifier.padding(it)) {
+    val onVolumeClicked: (Volume) -> Unit = {
+        navigator.navigate(DetailsDestination(it.id))
+    }
 
-            val data by homeViewModel.searchResult.collectAsState(Resource.Loading)
+    Column {
 
-            val query by homeViewModel.query.collectAsState(stringResource(R.string.empty_string))
+        val data by homeViewModel.searchResult.collectAsState(Resource.Loading)
 
-            SearchBar(
-                queryString = query,
-                onQueryStringChanged = { newQuery ->
-                    homeViewModel.onEvent(HomeUIEvent.UpdateQuery(newQuery))
-                }
-            )
+        val query by homeViewModel.query.collectAsState(stringResource(R.string.empty_string))
 
-            SearchResultsSection(data, {
-                homeViewModel.onEvent(homeUIEvent = HomeUIEvent.ForceLoadingFromServer())
+        SearchBar(
+            queryString = query,
+            onQueryStringChanged = { newQuery ->
+                homeViewModel.onEvent(HomeUIEvent.UpdateQuery(newQuery))
             }
-            ) { volume ->
-                navigator.navigate(DetailsDestination(volumeId = volume.id))
-            }
-        }
+        )
+
+        SearchResultsSection(
+            data = data,
+            onRefreshClicked = { homeViewModel.onEvent(homeUIEvent = HomeUIEvent.ForceLoadingFromServer()) },
+            onItemClicked = onVolumeClicked
+        )
     }
 }
 

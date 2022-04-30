@@ -2,9 +2,9 @@ package com.mahmoud_darwish.data.repository
 
 import com.mahmoud_darwish.data.di.AppIOCoroutineScope
 import com.mahmoud_darwish.data.local.VolumeEntityDao
-import com.mahmoud_darwish.data.mapper.toVolumeList
 import com.mahmoud_darwish.data.mapper.toVolume
 import com.mahmoud_darwish.data.mapper.toVolumeEntityList
+import com.mahmoud_darwish.data.mapper.toVolumeList
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.util.UiText
 import com.mahmoud_darwish.domain.model.Volume
@@ -14,7 +14,8 @@ import com.mahmoud_darwish.domain.util.Source
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,7 +38,8 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     override val searchResult: MutableStateFlow<Resource<List<Volume>>> =
         MutableStateFlow(Resource.Loading)
 
-    private val _queryString: MutableStateFlow<String> = MutableStateFlow(uiText.initialSearchTerm)
+    private val _queryString: MutableStateFlow<String> =
+        MutableStateFlow(uiText.initialSearchTerm)
     override val query: StateFlow<String> = _queryString
 
     /*
@@ -152,7 +154,8 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     }
 
     private fun emitError(message: String?) {
-        searchResult.value = Resource.Error(message ?: uiText.unknownErrorMessage)
+        searchResult.value =
+            Resource.Error(message ?: uiText.unknownErrorMessage)
     }
 
     private fun emitLoading() {

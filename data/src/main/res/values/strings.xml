@@ -5,4 +5,8 @@
     <string name="search_term_not_entered_error_message">Please enter a title to search for</string>
     <string name="no_results_found_error">No results were found</string>
     <string name="unknown_error_message">An unexpected error occurred</string>
+    <string name="home_navigation_bar_item_name">Home</string>
+    <string name="favorites_navigation_bar_item_name">Favorites</string>
+    <string name="settings_navigation_bar_item_name">Settings</string>
+    <string name="the_volume_was_not_found_error_message">The volume was not found</string>
 </resources>

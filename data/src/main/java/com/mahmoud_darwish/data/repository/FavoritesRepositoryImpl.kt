@@ -5,9 +5,9 @@ import com.mahmoud_darwish.data.local.FavoriteEntityDao
 import com.mahmoud_darwish.data.local.model.Favorite
 import com.mahmoud_darwish.domain.repository.IFavoritesRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton

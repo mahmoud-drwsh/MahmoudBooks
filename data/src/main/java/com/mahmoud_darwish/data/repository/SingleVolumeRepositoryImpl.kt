@@ -19,17 +19,19 @@ class SingleVolumeRepositoryImpl @Inject constructor(
     private val uiText: UiText,
 ) : ISingleVolumeRepository {
 
-    private val idString: MutableStateFlow<String?> = MutableStateFlow(null)
+    private val volumeIdString: MutableStateFlow<String?> = MutableStateFlow(null)
 
     override fun setVolumeId(id: String) {
-        idString.value = id
+        volumeIdString.value = id
     }
 
-    override val searchResult: Flow<Resource<Volume>> = idString.transform { it ->
+    override val searchResult: Flow<Resource<Volume>> = volumeIdString.transform {
         emit(Resource.Loading)
+
         val resource: Resource<Volume> =
             if (it != null) Resource.Success(dao.getVolumeEntity(it).toVolume(), Source.CACHE)
             else Resource.Error(uiText.noResultsFoundInCacheErrorMessage)
+
         emit(resource)
     }
 }

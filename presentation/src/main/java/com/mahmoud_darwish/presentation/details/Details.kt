@@ -29,24 +29,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.mahmoud_darwish.compose_components.BookImage
 import com.mahmoud_darwish.compose_components.ResourceComposable
 import com.mahmoud_darwish.compose_components.theme.mediumPadding
 import com.mahmoud_darwish.domain.model.Volume
-import com.mahmoud_darwish.domain.repository.IFavoritesRepository
-import com.mahmoud_darwish.domain.repository.IVolumeSearchRepository
 import com.mahmoud_darwish.domain.util.Resource
 import com.mahmoud_darwish.domain.util.Source
-import com.mahmoud_darwish.compose_components.BookImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import java.text.DecimalFormat
-import javax.inject.Inject
 
 private val priceFormatter = DecimalFormat.getInstance()
 
@@ -95,7 +86,8 @@ fun Details(
         val collectAsState: Resource<Volume> by detailsViewModel.volumeResource.collectAsState(
             Resource.Loading
         )
-        collectAsState.ResourceComposable() { volume: Volume, source: Source, message: String? ->
+
+        collectAsState.ResourceComposable { volume: Volume, _: Source, _: String? ->
             Column(
                 Modifier
                     .padding(it)
@@ -106,18 +98,19 @@ fun Details(
                 Row(
                     verticalAlignment = CenterVertically,
                     horizontalArrangement = spacedBy(mediumPadding),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     BookImage(
                         imageUrl = volume.thumbnailLarge,
                         modifier = Modifier.weight(1f),
-                        onClick = {},
                         ContentScale.FillWidth
                     )
                     Column(
                         horizontalAlignment = Start,
                         verticalArrangement = spacedBy(mediumPadding),
-                        modifier = Modifier.weight(1.5f),
+                        modifier = Modifier
+                            .weight(1.5f),
                     ) {
                         Text(
                             text = volume.title,
@@ -208,40 +201,3 @@ private fun VolumeInfoRowBlock(topText: String, bottomText: String, modifier: Mo
     }
 }
 
-@HiltViewModel
-class DetailsViewModel @Inject constructor(
-    private val repo: IVolumeSearchRepository,
-    private val favoritesRepo: IFavoritesRepository
-) : ViewModel() {
-    private lateinit var currentVolumeId: String
-    lateinit var isFavorite: Flow<Boolean>
-
-
-    val volumeResource: MutableStateFlow<Resource<Volume>> =
-        MutableStateFlow(Resource.Loading)
-
-    fun setId(id: String) {
-        currentVolumeId = id
-
-        isFavorite = favoritesRepo.isVolumeFavorite(currentVolumeId)
-
-        loadVolume()
-    }
-
-    private fun loadVolume() {
-        volumeResource.value = Resource.Loading
-
-        viewModelScope.launch {
-            try {
-                val volumeById: Volume = repo.getVolumeById(currentVolumeId)
-                volumeResource.value = Resource.Success(volumeById, Source.CACHE)
-            } catch (e: Exception) {
-                e.printStackTrace()
-
-                volumeResource.value = Resource.Error("The volume was not found")
-            }
-        }
-    }
-
-    fun toggleFavoriteStatus() = favoritesRepo.toggleFavoriteStatus(currentVolumeId)
-}
