@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.presentation
+package com.mahmoud_darwish.ui_main
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

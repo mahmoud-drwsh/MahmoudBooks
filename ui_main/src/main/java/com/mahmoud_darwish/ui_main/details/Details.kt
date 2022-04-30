@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.presentation.details
+package com.mahmoud_darwish.ui_main.details
 
 import android.content.Context
 import android.content.Intent

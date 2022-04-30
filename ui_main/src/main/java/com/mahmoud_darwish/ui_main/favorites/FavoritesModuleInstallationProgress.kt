@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.presentation.favorites
+package com.mahmoud_darwish.ui_main.favorites
 
 import android.app.Application
 import androidx.compose.foundation.layout.Row

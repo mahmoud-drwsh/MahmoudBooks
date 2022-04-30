@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.SplitInstallSessionState
-import com.mahmoud_darwish.presentation.home.Home
+import com.mahmoud_darwish.ui_main.home.Home
 import dagger.hilt.android.AndroidEntryPoint
 
 /* TODO: Fix the split module installation */

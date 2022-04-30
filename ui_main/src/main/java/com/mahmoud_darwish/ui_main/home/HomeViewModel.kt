@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.presentation.home
+package com.mahmoud_darwish.ui_main.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

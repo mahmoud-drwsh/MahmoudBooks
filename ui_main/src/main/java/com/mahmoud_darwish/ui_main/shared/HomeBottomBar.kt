@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.presentation.shared
+package com.mahmoud_darwish.ui_main.shared
 
 import androidx.annotation.StringRes
 import androidx.compose.material.BottomNavigation
@@ -13,9 +13,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.mahmoud_darwish.presentation.destinations.DirectionDestination
-import com.mahmoud_darwish.presentation.destinations.FavoritesModuleInstallationProgressDestination
-import com.mahmoud_darwish.presentation.destinations.HomeContentDestination
+import com.mahmoud_darwish.ui_main.destinations.DirectionDestination
+import com.mahmoud_darwish.ui_main.destinations.FavoritesModuleInstallationProgressDestination
+import com.mahmoud_darwish.ui_main.destinations.HomeContentDestination
 import com.ramcosta.composedestinations.navigation.navigateTo
 
 enum class BottomBarDestination(
