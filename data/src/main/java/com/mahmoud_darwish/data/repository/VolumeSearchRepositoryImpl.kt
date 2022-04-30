@@ -7,10 +7,10 @@ import com.mahmoud_darwish.data.mapper.toVolumeEntityList
 import com.mahmoud_darwish.data.mapper.toVolumeList
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.util.UiText
-import com.mahmoud_darwish.domain.model.Volume
-import com.mahmoud_darwish.domain.repository.IVolumeSearchRepository
-import com.mahmoud_darwish.domain.util.Resource
-import com.mahmoud_darwish.domain.util.Source
+import com.mahmoud_darwish.core.model.Volume
+import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
+import com.mahmoud_darwish.core.util.Resource
+import com.mahmoud_darwish.core.util.Source
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

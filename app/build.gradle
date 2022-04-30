@@ -52,7 +52,7 @@ android {
         }
     }
 
-    dynamicFeatures = [':favorites']
+    dynamicFeatures = [':ui_favorites']
 
     // needed for the compose navigation library to work
     applicationVariants.all { variant ->
@@ -65,9 +65,10 @@ android {
 }
 
 dependencies {
-    implementation project(":domain")
-    implementation project(':presentation')
+    implementation project(':core')
     implementation project(':data')
+    implementation project(':ui_core')
+    implementation project(':ui_main')
 }
 
 // needed for on-demand delivery of dynamic feature modules
@@ -76,5 +77,6 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.8.1'
 }
 
+
 apply from: "../build_shared_dependencies.gradle"
-apply from: "../build_shared_dependencies_compose.gradle"
+

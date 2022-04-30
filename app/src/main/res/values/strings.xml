@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MahmoudBooks</string>
     <string name="title_favorites">favorites</string>
+    <string name="title_activity_favorites">FavoritesActivity</string>
 </resources>

@@ -12,6 +12,7 @@ class UiText @Inject constructor(val app: Application) {
 
     val theVolumeWasNotFoundErrorMessage: String
         get() = getStringForId(R.string.the_volume_was_not_found_error_message)
+
     val initialSearchTerm: String
         get() = getStringForId(R.string.initial_search_term)
     val unknownErrorMessage: String

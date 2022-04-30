@@ -3,7 +3,7 @@ package com.mahmoud_darwish.data.repository
 import com.mahmoud_darwish.data.di.AppIOCoroutineScope
 import com.mahmoud_darwish.data.local.FavoriteEntityDao
 import com.mahmoud_darwish.data.local.model.Favorite
-import com.mahmoud_darwish.domain.repository.IFavoritesRepository
+import com.mahmoud_darwish.core.repository.IFavoritesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

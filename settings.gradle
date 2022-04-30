@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 rootProject.name = "MahmoudBooks"
 include ':app'
 include ':data'
-include ':domain'
-include ':presentation'
-include ':compose_components'
-include ':favorites'
+include ':ui_main'
+include ':ui_core'
+include ':ui_favorites'
+include ':core'

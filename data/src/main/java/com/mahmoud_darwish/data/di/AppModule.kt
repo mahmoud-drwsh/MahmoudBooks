@@ -14,9 +14,9 @@ import com.mahmoud_darwish.data.remote.getBooksServiceInstance
 import com.mahmoud_darwish.data.repository.FavoritesRepositoryImpl
 import com.mahmoud_darwish.data.repository.IFavoritesListRepositoryImpl
 import com.mahmoud_darwish.data.repository.VolumeSearchRepositoryImpl
-import com.mahmoud_darwish.domain.repository.IFavoritesListRepository
-import com.mahmoud_darwish.domain.repository.IFavoritesRepository
-import com.mahmoud_darwish.domain.repository.IVolumeSearchRepository
+import com.mahmoud_darwish.core.repository.IFavoritesListRepository
+import com.mahmoud_darwish.core.repository.IFavoritesRepository
+import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

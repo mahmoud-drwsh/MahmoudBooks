@@ -1,7 +1,7 @@
 package com.mahmoud_darwish.data.repository
 
 import com.mahmoud_darwish.data.local.VolumeEntityDao
-import com.mahmoud_darwish.domain.repository.ISettingsRepository
+import com.mahmoud_darwish.core.repository.ISettingsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
