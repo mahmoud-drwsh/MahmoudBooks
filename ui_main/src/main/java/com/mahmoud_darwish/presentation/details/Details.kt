@@ -29,9 +29,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mahmoud_darwish.compose_components.BookImage
-import com.mahmoud_darwish.compose_components.ResourceComposable
-import com.mahmoud_darwish.compose_components.theme.mediumPadding
+import com.mahmoud_darwish.ui_core.BookImage
+import com.mahmoud_darwish.ui_core.ResourceComposable
+import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.Resource
 import com.mahmoud_darwish.core.util.Source

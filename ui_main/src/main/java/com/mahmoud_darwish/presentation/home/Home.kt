@@ -15,9 +15,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.mahmoud_darwish.compose_components.ResourceComposable
-import com.mahmoud_darwish.compose_components.StatelessBooksHorizontalLazyRow
-import com.mahmoud_darwish.compose_components.theme.mediumPadding
+import com.mahmoud_darwish.ui_core.ResourceComposable
+import com.mahmoud_darwish.ui_core.StatelessBooksHorizontalLazyRow
+import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.Resource
 import com.mahmoud_darwish.core.util.Source

@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.compose_components
+package com.mahmoud_darwish.ui_core
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import com.mahmoud_darwish.compose_components.theme.imageHeight
-import com.mahmoud_darwish.compose_components.theme.imageShape
+import com.mahmoud_darwish.ui_core.theme.imageHeight
+import com.mahmoud_darwish.ui_core.theme.imageShape
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable

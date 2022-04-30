@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.compose_components
+package com.mahmoud_darwish.ui_core
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope

@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.compose_components
+package com.mahmoud_darwish.ui_core
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

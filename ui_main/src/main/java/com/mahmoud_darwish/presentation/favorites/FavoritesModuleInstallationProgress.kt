@@ -19,7 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
-import com.mahmoud_darwish.compose_components.CenteredText
+import com.mahmoud_darwish.ui_core.CenteredText
 import com.mahmoud_darwish.core.util.Constants
 import com.mahmoud_darwish.data.util.UiText
 import com.ramcosta.composedestinations.annotation.Destination

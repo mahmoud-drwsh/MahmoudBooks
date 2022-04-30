@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.compose_components.theme
+package com.mahmoud_darwish.ui_core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.compose_components.theme
+package com.mahmoud_darwish.ui_core.theme
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
