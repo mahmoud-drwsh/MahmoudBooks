@@ -10,9 +10,10 @@ import javax.inject.Singleton
 class UiText @Inject constructor(val app: Application) {
     private fun getStringForId(@StringRes id: Int): String = app.getString(id)
 
+    val noFavoritesFound: String
+        get() = getStringForId(R.string.no_favorites_found_error_message)
     val theVolumeWasNotFoundErrorMessage: String
         get() = getStringForId(R.string.the_volume_was_not_found_error_message)
-
     val initialSearchTerm: String
         get() = getStringForId(R.string.initial_search_term)
     val unknownErrorMessage: String

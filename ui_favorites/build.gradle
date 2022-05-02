@@ -57,6 +57,7 @@ dependencies {
 
     implementation project(":app")
     implementation project(":core")
+    implementation project(":data")
     implementation(project(':ui_core'))
 }
 

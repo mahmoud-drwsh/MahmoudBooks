@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.mahmoud_darwish.data.di.AppIOCoroutineScope
+import com.mahmoud_darwish.data.di.AppIoCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class PreferencesRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    @AppIOCoroutineScope
+    @AppIoCoroutineScope
     private val scope: CoroutineScope
 ) {
     fun updateSearchQuery(term: String) {

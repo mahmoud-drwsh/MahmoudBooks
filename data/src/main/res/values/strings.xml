@@ -9,4 +9,5 @@
     <string name="favorites_navigation_bar_item_name">Favorites</string>
     <string name="settings_navigation_bar_item_name">Settings</string>
     <string name="the_volume_was_not_found_error_message">The volume was not found</string>
+    <string name="no_favorites_found_error_message">There are no favorites added</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.mahmoud_darwish.data.repository
 
-import com.mahmoud_darwish.data.di.AppIOCoroutineScope
+import com.mahmoud_darwish.data.di.AppIoCoroutineScope
 import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.mapper.toVolume
 import com.mahmoud_darwish.data.mapper.toVolumeEntityList
@@ -23,7 +23,7 @@ class VolumeSearchRepositoryImpl @Inject constructor(
     private val service: GoogleBooksApi,
     private val volumeEntityDao: VolumeEntityDao,
     private val uiText: UiText,
-    @AppIOCoroutineScope
+    @AppIoCoroutineScope
     private val scope: CoroutineScope
 ) : IVolumeSearchRepository {
     // this is later used to add a delay before a request is sent to Google books API server

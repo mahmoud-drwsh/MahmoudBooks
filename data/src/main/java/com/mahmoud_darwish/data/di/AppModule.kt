@@ -6,17 +6,17 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
+import com.mahmoud_darwish.core.repository.IFavoritesRepository
+import com.mahmoud_darwish.core.repository.IModuleInstallationRepository
+import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
 import com.mahmoud_darwish.data.local.FavoriteEntityDao
 import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.local.VolumeRoomDatabase
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.remote.getBooksServiceInstance
 import com.mahmoud_darwish.data.repository.FavoritesRepositoryImpl
-import com.mahmoud_darwish.data.repository.IFavoritesListRepositoryImpl
+import com.mahmoud_darwish.data.repository.IModuleInstallationRepositoryImpl
 import com.mahmoud_darwish.data.repository.VolumeSearchRepositoryImpl
-import com.mahmoud_darwish.core.repository.IFavoritesListRepository
-import com.mahmoud_darwish.core.repository.IFavoritesRepository
-import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,18 +33,16 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 object AppModule {
     @Provides
     @Singleton
-    fun provideBooksRepository(booksRepositoryImpl: VolumeSearchRepositoryImpl): IVolumeSearchRepository =
-        booksRepositoryImpl
+    fun provideBooksRepository(repo: VolumeSearchRepositoryImpl): IVolumeSearchRepository = repo
 
     @Provides
     @Singleton
-    fun provideFavoritesListRepository(favoritesListRepositoryImpl: IFavoritesListRepositoryImpl): IFavoritesListRepository =
-        favoritesListRepositoryImpl
+    fun provideFavoritesRepository(repo: FavoritesRepositoryImpl): IFavoritesRepository = repo
 
     @Provides
     @Singleton
-    fun provideFavoritesRepository(favoritesRepositoryImpl: FavoritesRepositoryImpl): IFavoritesRepository =
-        favoritesRepositoryImpl
+    fun provideModuleInstallationRepository(repo: IModuleInstallationRepositoryImpl): IModuleInstallationRepository =
+        repo
 
     @Provides
     @Singleton
@@ -70,7 +68,7 @@ object AppModule {
     fun provideFavoriteEntityDao(volumeRoomDatabase: VolumeRoomDatabase): FavoriteEntityDao =
         volumeRoomDatabase.getFavoriteEntityDao()
 
-    @AppIOCoroutineScope
+    @AppIoCoroutineScope
     @Provides
     @Singleton
     fun provideAppCoroutineScope(): CoroutineScope = CoroutineScope(IO)
@@ -79,4 +77,4 @@ object AppModule {
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class AppIOCoroutineScope
+annotation class AppIoCoroutineScope

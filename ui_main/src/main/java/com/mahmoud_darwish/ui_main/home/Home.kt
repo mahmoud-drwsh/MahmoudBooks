@@ -11,19 +11,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.Resource
 import com.mahmoud_darwish.core.util.Source
-import com.mahmoud_darwish.presentation.R
 import com.mahmoud_darwish.ui_core.ResourceComposable
 import com.mahmoud_darwish.ui_core.StatelessBooksHorizontalLazyRow
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.mahmoud_darwish.ui_main.NavGraphs
 import com.mahmoud_darwish.ui_main.destinations.DetailsDestination
+import com.mahmoud_darwish.ui_main.shared.BottomBar
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -33,10 +32,15 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun Home() {
     val navHostController = rememberNavController()
 
-    DestinationsNavHost(
-        navController = navHostController,
-        navGraph = NavGraphs.root
-    )
+    Scaffold(bottomBar = {
+        BottomBar(navController = navHostController)
+    }) { paddingValues ->
+        DestinationsNavHost(
+            navController = navHostController,
+            navGraph = NavGraphs.root,
+            modifier = Modifier.padding(paddingValues)
+        )
+    }
 }
 
 @Destination(start = true)
@@ -53,7 +57,7 @@ fun HomeContent(
 
         val data by homeViewModel.searchResult.collectAsState(Resource.Loading)
 
-        val query by homeViewModel.query.collectAsState(stringResource(R.string.empty_string))
+        val query by homeViewModel.query.collectAsState("")
 
         SearchBar(
             queryString = query,
@@ -76,7 +80,7 @@ private fun SearchResultsSection(
     onRefreshClicked: () -> Unit,
     onItemClicked: (Volume) -> Unit
 ) {
-    data.ResourceComposable { volumesList, source, _ ->
+    data.ResourceComposable { volumesList, source ->
 
         Column(verticalArrangement = spacedBy(mediumPadding)) {
 

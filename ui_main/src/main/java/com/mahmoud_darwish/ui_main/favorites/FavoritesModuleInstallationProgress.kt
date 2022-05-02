@@ -1,33 +1,29 @@
 package com.mahmoud_darwish.ui_main.favorites
 
-import android.app.Application
-import androidx.compose.foundation.layout.Row
+import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
-import com.google.android.play.core.splitinstall.SplitInstallRequest
-import com.mahmoud_darwish.ui_core.CenteredText
+import com.mahmoud_darwish.core.model.ModuleInstallationState
 import com.mahmoud_darwish.core.util.Constants
-import com.mahmoud_darwish.data.util.UiText
+import com.mahmoud_darwish.ui_core.CenteredContent
+import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
 @Destination
 @Composable
@@ -35,10 +31,11 @@ fun FavoritesModuleInstallationProgress(
     navigator: DestinationsNavigator,
     viewModel: FavoritesModuleInstallationProgressViewModel = hiltViewModel()
 ) {
-    /*TODO: COMPLETE*/
-    val collectAsState by viewModel
+    val context = LocalContext.current
+
+    val collectAsState: ModuleInstallationState by viewModel
         .installationState
-        .collectAsState(FavoritesModuleInstallationProgressViewModel.ModuleInstallationState.INSTALLING)
+        .collectAsState(ModuleInstallationState.Loading)
 
     Scaffold(
         topBar = {
@@ -49,7 +46,7 @@ fun FavoritesModuleInstallationProgress(
                     }
                 },
                 title = {},
-                backgroundColor = Color.White,
+                backgroundColor = Color.Transparent,
                 elevation = 0.dp
             )
         },
@@ -57,62 +54,44 @@ fun FavoritesModuleInstallationProgress(
 
         }
     ) {
-        Row(Modifier.padding(it)) { CenteredText(message = collectAsState.toString()) }
-    }
-}
+        CenteredContent {
+            Column(
+                Modifier
+                    .padding(it),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(mediumPadding)
+            ) {
 
-@HiltViewModel
-class FavoritesModuleInstallationProgressViewModel @Inject constructor(
-    private val uiText: UiText,
-    private val app: Application
-) : ViewModel() {
-
-    private var _moduleName: String? = Constants.favoritesFeatureModuleName
-
-    private val _installationState: MutableStateFlow<ModuleInstallationState> =
-        MutableStateFlow(ModuleInstallationState.INSTALLING)
-    val installationState: StateFlow<ModuleInstallationState>
-        get() = _installationState
-
-    fun setModuleName(moduleName: String) {
-        _moduleName = moduleName
-    }
-
-    private fun installChatModule() {
-        val splitInstallManager = SplitInstallManagerFactory.create(app)
-
-        if (splitInstallManager.installedModules.contains(_moduleName)) {
-            updateInstallationState(ModuleInstallationState.INSTALLED)
-        } else {
-            updateInstallationState(ModuleInstallationState.INSTALLING)
-
-            val request = SplitInstallRequest.newBuilder()
-                .addModule(_moduleName)
-                .build()
-
-            splitInstallManager.startInstall(request)
-                .addOnSuccessListener {
-                    updateInstallationState(ModuleInstallationState.INSTALLED)
-                }
-                .addOnFailureListener {
-                    it.printStackTrace()
-
-                    updateInstallationState(
-                        ModuleInstallationState.InstallError(
-                            message = it.message ?: uiText.unknownErrorMessage
-                        )
+                if (collectAsState !is ModuleInstallationState.Installed)
+                    Button(onClick = { viewModel.installModule() }) {
+                        Text(text = "Install module")
+                    }
+                else {
+                    Text(
+                        text = collectAsState.progressMessage(),
+                        style = MaterialTheme.typography.h6,
+                        textAlign = TextAlign.Center
                     )
+                    Button(onClick = { /*viewModel.goToFavorites()*/
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Constants.FeaturesMainActivityUriString.toUri()
+                            ).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            })
+                    }) {
+                        Text(text = "Open")
+                    }
                 }
+            }
         }
     }
-
-    private fun updateInstallationState(newState: ModuleInstallationState) {
-        _installationState.value = newState
-    }
-
-    sealed class ModuleInstallationState {
-        object INSTALLING : ModuleInstallationState()
-        object INSTALLED : ModuleInstallationState()
-        class InstallError(val message: String? = null) : ModuleInstallationState()
-    }
 }
+
+fun ModuleInstallationState.progressMessage(): String = when (this) {
+    ModuleInstallationState.Loading -> "The module is being installed"
+    is ModuleInstallationState.Installed -> "The module has been installed"
+    is ModuleInstallationState.InstallError -> message ?: ""
+}
+

@@ -29,12 +29,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mahmoud_darwish.core.model.Volume
+import com.mahmoud_darwish.core.util.Resource
 import com.mahmoud_darwish.ui_core.BookImage
 import com.mahmoud_darwish.ui_core.ResourceComposable
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
-import com.mahmoud_darwish.core.model.Volume
-import com.mahmoud_darwish.core.util.Resource
-import com.mahmoud_darwish.core.util.Source
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.DecimalFormat
@@ -49,7 +48,7 @@ fun Details(
     detailsViewModel: DetailsViewModel = hiltViewModel(),
     context: Context = LocalContext.current
 ) {
-    detailsViewModel.setId(volumeId)
+    detailsViewModel.initialize(volumeId)
 
     val isFavorite: Boolean by detailsViewModel.isFavorite.collectAsState(initial = false)
 
@@ -66,7 +65,7 @@ fun Details(
                         Icon(Icons.Default.ArrowBack, contentDescription = "navigate back")
                     }
                 },
-                backgroundColor = Color.White,
+                backgroundColor = Color.Transparent,
                 elevation = 0.dp,
                 actions = {
                     IconButton(onClick = { detailsViewModel.toggleFavoriteStatus() }) {
@@ -87,7 +86,7 @@ fun Details(
             Resource.Loading
         )
 
-        collectAsState.ResourceComposable { volume: Volume, _: Source, _: String? ->
+        collectAsState.ResourceComposable { volume: Volume, _ ->
             Column(
                 Modifier
                     .padding(it)

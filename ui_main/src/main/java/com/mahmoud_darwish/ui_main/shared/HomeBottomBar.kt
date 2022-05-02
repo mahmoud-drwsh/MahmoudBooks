@@ -8,14 +8,18 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.mahmoud_darwish.ui_main.destinations.DirectionDestination
 import com.mahmoud_darwish.ui_main.destinations.FavoritesModuleInstallationProgressDestination
 import com.mahmoud_darwish.ui_main.destinations.HomeContentDestination
+import com.mahmoud_darwish.ui_main.destinations.SettingsScreenDestination
 import com.ramcosta.composedestinations.navigation.navigateTo
 
 enum class BottomBarDestination(
@@ -29,32 +33,39 @@ enum class BottomBarDestination(
         com.mahmoud_darwish.data.R.string.home_navigation_bar_item_name
     ),
     Favorites(
-        HomeContentDestination,
+        FavoritesModuleInstallationProgressDestination,
         Icons.Default.Bookmark,
         com.mahmoud_darwish.data.R.string.favorites_navigation_bar_item_name
     ),
     Settings(
-        FavoritesModuleInstallationProgressDestination,
-        Icons.Default.Bookmark,
+        SettingsScreenDestination,
+        Icons.Default.Settings,
         com.mahmoud_darwish.data.R.string.settings_navigation_bar_item_name
-    ),
+    )
+}
+
+@com.ramcosta.composedestinations.annotation.Destination
+@Composable
+fun SettingsScreen() {
+
 }
 
 @Composable
 fun BottomBar(
     navController: NavController
 ) {
-    /*val currentDestination by navController.currentBackStackEntryAsState()*/
-    val name: String = "Settings"
+    val currentDestination by navController.currentBackStackEntryAsState()
+
+    val id = currentDestination
+    LaunchedEffect(id) {
+        println(id?.destination?.route)
+    }
 
     BottomNavigation {
         BottomBarDestination.values().forEach { destination ->
-            LaunchedEffect(destination) {
-                println(destination.name)
-            }
 
             BottomNavigationItem(
-                selected = name == destination.name,
+                selected = currentDestination?.destination?.route == destination.direction.route,
                 onClick = {
                     navController.navigateTo(destination.direction) {
                         launchSingleTop = true

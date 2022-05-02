@@ -13,12 +13,23 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application>
+    <application
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".FavoritesActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_favorites"
-            android:theme="@style/Theme.MahmoudBooks" />
+            android:theme="@style/Theme.MahmoudBooks">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="favorites"
+                    android:scheme="mahmoud_books" />
+            </intent-filter>
+        </activity>
+
+
     </application>
 
 </manifest>
