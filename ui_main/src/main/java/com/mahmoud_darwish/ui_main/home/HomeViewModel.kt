@@ -5,16 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
 import com.mahmoud_darwish.core.util.Resource
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+@KoinViewModel
+class HomeViewModel constructor(
     private val volumeSearchRepo: IVolumeSearchRepository
 ) : ViewModel() {
 
@@ -66,7 +65,7 @@ data class HomeUIState<T>(
     val data: T? = null,
 )
 
-sealed class HomeUIEvent() {
-    class UpdateQuery(val query: String) : HomeUIEvent()
-    class ForceLoadingFromServer : HomeUIEvent()
+sealed class HomeUIEvent {
+    data class UpdateQuery(val query: String) : HomeUIEvent()
+    object ForceLoadingFromServer : HomeUIEvent()
 }

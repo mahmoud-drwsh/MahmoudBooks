@@ -15,18 +15,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.Resource
-import com.mahmoud_darwish.data.di.FavoritesModuleDependencies
 import com.mahmoud_darwish.ui_core.ResourceComposable
 import com.mahmoud_darwish.ui_core.StatelessBooksHorizontalLazyRow
 import com.mahmoud_darwish.ui_core.theme.MahmoudBooksTheme
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
-import dagger.hilt.android.EntryPointAccessors
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.startKoin
 
 class FavoritesActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var viewModel: FavoritesViewModel
+    val viewModel: FavoritesViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
@@ -72,16 +70,9 @@ class FavoritesActivity : ComponentActivity() {
     }
 
     private fun inject() {
-        DaggerFavoritesComponent.builder()
-            .context(this)
-            .appDependencies(
-                EntryPointAccessors.fromApplication(
-                    applicationContext,
-                    FavoritesModuleDependencies::class.java
-                )
-            )
-            .build()
-            .inject(this)
+        startKoin {
+
+        }
     }
 
     private fun navigateBack() = this.finish()

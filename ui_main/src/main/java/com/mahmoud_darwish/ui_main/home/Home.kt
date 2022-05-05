@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.Resource
@@ -26,6 +25,7 @@ import com.mahmoud_darwish.ui_main.shared.BottomBar
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import org.koin.androidx.compose.getViewModel
 
 
 @Composable
@@ -47,7 +47,7 @@ fun Home() {
 @Composable
 fun HomeContent(
     navigator: DestinationsNavigator,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = getViewModel(),
 ) {
     val onVolumeClicked: (Volume) -> Unit = {
         navigator.navigate(DetailsDestination(it.id))
@@ -68,7 +68,7 @@ fun HomeContent(
 
         SearchResultsSection(
             data = data,
-            onRefreshClicked = { homeViewModel.onEvent(homeUIEvent = HomeUIEvent.ForceLoadingFromServer()) },
+            onRefreshClicked = { homeViewModel.onEvent(homeUIEvent = HomeUIEvent.ForceLoadingFromServer) },
             onItemClicked = onVolumeClicked
         )
     }

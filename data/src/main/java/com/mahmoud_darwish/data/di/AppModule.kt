@@ -1,80 +1,45 @@
 package com.mahmoud_darwish.data.di
 
-import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.room.Room
 import com.mahmoud_darwish.core.repository.IFavoritesRepository
 import com.mahmoud_darwish.core.repository.IModuleInstallationRepository
 import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
-import com.mahmoud_darwish.data.local.FavoriteEntityDao
-import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.local.VolumeRoomDatabase
+import com.mahmoud_darwish.data.local.getVolumeRoomDatabaseInstance
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.remote.getBooksServiceInstance
 import com.mahmoud_darwish.data.repository.FavoritesRepositoryImpl
-import com.mahmoud_darwish.data.repository.IModuleInstallationRepositoryImpl
+import com.mahmoud_darwish.data.repository.ModuleInstallationRepositoryImpl
 import com.mahmoud_darwish.data.repository.VolumeSearchRepositoryImpl
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import javax.inject.Qualifier
-import javax.inject.Singleton
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Provides
-    @Singleton
-    fun provideBooksRepository(repo: VolumeSearchRepositoryImpl): IVolumeSearchRepository = repo
+@Suppress("RemoveExplicitTypeArguments")
+val AppKoinModule = module {
+    single<IVolumeSearchRepository> { VolumeSearchRepositoryImpl(get(), get(), get(), get()) }
 
-    @Provides
-    @Singleton
-    fun provideFavoritesRepository(repo: FavoritesRepositoryImpl): IFavoritesRepository = repo
+    single<IFavoritesRepository> { FavoritesRepositoryImpl(get(), get(), get()) }
 
-    @Provides
-    @Singleton
-    fun provideModuleInstallationRepository(repo: IModuleInstallationRepositoryImpl): IModuleInstallationRepository =
-        repo
+    single<IModuleInstallationRepository> { ModuleInstallationRepositoryImpl(get(), get(), get()) }
 
-    @Provides
-    @Singleton
-    fun providePreferencesDataStore(app: Application): DataStore<Preferences> = app.dataStore
+    single<DataStore<Preferences>> { androidContext().dataStore }
 
-    @Provides
-    @Singleton
-    fun provideBooksService(): GoogleBooksApi = getBooksServiceInstance()
+    single<GoogleBooksApi> { getBooksServiceInstance() }
 
-    @Provides
-    @Singleton
-    fun provideVolumeRoomDatabase(app: Application): VolumeRoomDatabase = Room
-        .databaseBuilder(app.applicationContext, VolumeRoomDatabase::class.java, "volume_db.db")
-        .build()
+    single { getVolumeRoomDatabaseInstance(androidContext()) }
 
-    @Provides
-    @Singleton
-    fun provideVolumeEntityDao(volumeRoomDatabase: VolumeRoomDatabase): VolumeEntityDao =
-        volumeRoomDatabase.getVolumeEntityDao()
+    single { get<VolumeRoomDatabase>().getVolumeEntityDao() }
 
-    @Provides
-    @Singleton
-    fun provideFavoriteEntityDao(volumeRoomDatabase: VolumeRoomDatabase): FavoriteEntityDao =
-        volumeRoomDatabase.getFavoriteEntityDao()
+    single { get<VolumeRoomDatabase>().getFavoriteEntityDao() }
 
-    @AppIoCoroutineScope
-    @Provides
-    @Singleton
-    fun provideAppCoroutineScope(): CoroutineScope = CoroutineScope(IO)
+    single<CoroutineScope> { CoroutineScope(IO) }
 }
 
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class AppIoCoroutineScope
+class AppModule

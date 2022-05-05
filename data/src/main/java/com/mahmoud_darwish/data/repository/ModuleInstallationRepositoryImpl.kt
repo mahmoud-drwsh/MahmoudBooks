@@ -5,19 +5,16 @@ import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.mahmoud_darwish.core.model.ModuleInstallationState
 import com.mahmoud_darwish.core.repository.IModuleInstallationRepository
-import com.mahmoud_darwish.data.di.AppIoCoroutineScope
 import com.mahmoud_darwish.data.util.UiText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
+import org.koin.core.annotation.Single
 
-@Singleton
-class IModuleInstallationRepositoryImpl @Inject constructor(
+@Single
+class ModuleInstallationRepositoryImpl constructor(
     private val uiText: UiText,
-    @AppIoCoroutineScope
     private val viewModelScope: CoroutineScope,
     private val app: Application
 ) : IModuleInstallationRepository {

@@ -27,34 +27,37 @@ interface GoogleBooksApi {
 }
 
 /**
- * This function will be used by Hilt for creating a single instance of the service which will be the one used while the app is running
+ * This interceptor adds the API key to the requests
  * */
-fun getBooksServiceInstance(): GoogleBooksApi {
-    val apiKeyInterceptor: (Interceptor.Chain) -> Response = {
-        val originalRequest = it.request()
+private val apiKeyInterceptor: (Interceptor.Chain) -> Response = {
+    val originalRequest = it.request()
 
-        val newUrl = originalRequest.url().newBuilder()
-            .addQueryParameter("app_key", API_KEY)
-            .build()
-
-        val build = originalRequest
-            .newBuilder()
-            .url(newUrl)
-            .build()
-
-        println("Requesting: ${newUrl.url()}")
-
-        it.proceed(build)
-    }
-    val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(apiKeyInterceptor).build()
-
-    return Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(
-            okHttpClient
-        )
-        .baseUrl(BASE)
+    val newUrl = originalRequest.url().newBuilder()
+        .addQueryParameter("app_key", API_KEY)
         .build()
-        .create(GoogleBooksApi::class.java)
+
+    val build = originalRequest
+        .newBuilder()
+        .url(newUrl)
+        .build()
+
+    println("Requesting: ${newUrl.url()}")
+
+    it.proceed(build)
 }
+
+
+private val okHttpClient: OkHttpClient = OkHttpClient
+    .Builder()
+    .addInterceptor(apiKeyInterceptor)
+    .build()
+
+/**
+ * This function will be used by the DI lib for creating a single instance of the service which will be the one used while the app is running
+ * */
+fun getBooksServiceInstance(): GoogleBooksApi = Retrofit.Builder()
+    .addConverterFactory(GsonConverterFactory.create())
+    .client(okHttpClient)
+    .baseUrl(BASE)
+    .build()
+    .create(GoogleBooksApi::class.java)

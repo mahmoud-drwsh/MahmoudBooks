@@ -1,29 +1,29 @@
 package com.mahmoud_darwish.data.repository
 
-import com.mahmoud_darwish.data.di.AppIoCoroutineScope
+import com.mahmoud_darwish.core.model.Volume
+import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
+import com.mahmoud_darwish.core.util.Resource
+import com.mahmoud_darwish.core.util.Source
 import com.mahmoud_darwish.data.local.VolumeEntityDao
 import com.mahmoud_darwish.data.mapper.toVolume
 import com.mahmoud_darwish.data.mapper.toVolumeEntityList
 import com.mahmoud_darwish.data.mapper.toVolumeList
 import com.mahmoud_darwish.data.remote.GoogleBooksApi
 import com.mahmoud_darwish.data.util.UiText
-import com.mahmoud_darwish.core.model.Volume
-import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
-import com.mahmoud_darwish.core.util.Resource
-import com.mahmoud_darwish.core.util.Source
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.core.annotation.Single
 
-class VolumeSearchRepositoryImpl @Inject constructor(
+
+@Single
+class VolumeSearchRepositoryImpl constructor(
     private val service: GoogleBooksApi,
     private val volumeEntityDao: VolumeEntityDao,
     private val uiText: UiText,
-    @AppIoCoroutineScope
     private val scope: CoroutineScope
 ) : IVolumeSearchRepository {
     // this is later used to add a delay before a request is sent to Google books API server

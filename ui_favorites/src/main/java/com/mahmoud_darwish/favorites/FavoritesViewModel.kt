@@ -1,15 +1,15 @@
 package com.mahmoud_darwish.favorites
 
+import androidx.lifecycle.ViewModel
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IFavoritesRepository
 import com.mahmoud_darwish.core.util.Resource
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
-import javax.inject.Singleton
+import org.koin.android.annotation.KoinViewModel
 
-@Singleton
-class FavoritesViewModel @Inject constructor(
+@KoinViewModel
+class FavoritesViewModel constructor(
     repo: IFavoritesRepository
-) {
+) : ViewModel() {
     val favorites: Flow<Resource<List<Volume>>> = repo.favorites
 }

@@ -4,7 +4,6 @@ import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IFavoritesRepository
 import com.mahmoud_darwish.core.util.Resource
 import com.mahmoud_darwish.core.util.Source
-import com.mahmoud_darwish.data.di.AppIoCoroutineScope
 import com.mahmoud_darwish.data.local.FavoriteEntityDao
 import com.mahmoud_darwish.data.local.model.Favorite
 import com.mahmoud_darwish.data.local.model.VolumeEntity
@@ -15,13 +14,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
+import org.koin.core.annotation.Single
 
-@Singleton
-class FavoritesRepositoryImpl @Inject constructor(
+@Single
+class FavoritesRepositoryImpl constructor(
     private val favoriteEntityDao: FavoriteEntityDao,
-    @AppIoCoroutineScope
     private val appIoScope: CoroutineScope,
     private val uiText: UiText
 ) : IFavoritesRepository {

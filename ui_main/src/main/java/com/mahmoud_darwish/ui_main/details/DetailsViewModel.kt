@@ -8,17 +8,16 @@ import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
 import com.mahmoud_darwish.core.util.Resource
 import com.mahmoud_darwish.core.util.Source
 import com.mahmoud_darwish.data.util.UiText
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
 /**
  * The use of this viewModel requires setting the ID of the volume to show the details of using the initialize function before it can function as expected
  * */
-@HiltViewModel
-class DetailsViewModel @Inject constructor(
+@KoinViewModel
+class DetailsViewModel constructor(
     private val repo: IVolumeSearchRepository,
     private val favoritesRepo: IFavoritesRepository,
     private val uiText: UiText

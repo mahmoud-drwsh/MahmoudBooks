@@ -16,9 +16,9 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.sp
+import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.ui_core.theme.imageHeight
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
-import com.mahmoud_darwish.core.model.Volume
 import java.text.DecimalFormat
 import java.text.NumberFormat
 

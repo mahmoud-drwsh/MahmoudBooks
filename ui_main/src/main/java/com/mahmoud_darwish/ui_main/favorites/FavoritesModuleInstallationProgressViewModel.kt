@@ -7,13 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.mahmoud_darwish.core.model.ModuleInstallationState
 import com.mahmoud_darwish.core.repository.IModuleInstallationRepository
 import com.mahmoud_darwish.core.util.Constants
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
 
-@HiltViewModel
-class FavoritesModuleInstallationProgressViewModel @Inject constructor(
+@KoinViewModel
+class FavoritesModuleInstallationProgressViewModel constructor(
     private val IModuleInstallationRepository: IModuleInstallationRepository,
     private val app: Application
 ) : ViewModel() {

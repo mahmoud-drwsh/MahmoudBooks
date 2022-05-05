@@ -4,7 +4,6 @@ plugins {
 
     // Hilt
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 
     id 'com.google.devtools.ksp'
 }
@@ -33,6 +32,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    libraryVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -56,11 +62,11 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-    // optional - Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
-
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.0-alpha01"
+
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
 }
 
 
@@ -68,7 +74,6 @@ dependencies {
 dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 }
-
 
 apply from: "../build_shared_dependencies.gradle"
 apply from: "../build_shared_dependencies_google_play.gradle"

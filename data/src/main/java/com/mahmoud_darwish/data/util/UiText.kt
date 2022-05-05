@@ -3,11 +3,10 @@ package com.mahmoud_darwish.data.util
 import android.app.Application
 import androidx.annotation.StringRes
 import com.mahmoud_darwish.data.R
-import javax.inject.Inject
-import javax.inject.Singleton
+import org.koin.core.annotation.Single
 
-@Singleton
-class UiText @Inject constructor(val app: Application) {
+@Single
+class UiText constructor(val app: Application) {
     private fun getStringForId(@StringRes id: Int): String = app.getString(id)
 
     val noFavoritesFound: String

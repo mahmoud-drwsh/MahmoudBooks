@@ -17,19 +17,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.mahmoud_darwish.core.model.ModuleInstallationState
 import com.mahmoud_darwish.core.util.Constants
 import com.mahmoud_darwish.ui_core.CenteredContent
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import org.koin.androidx.compose.getViewModel
 
 @Destination
 @Composable
 fun FavoritesModuleInstallationProgress(
     navigator: DestinationsNavigator,
-    viewModel: FavoritesModuleInstallationProgressViewModel = hiltViewModel()
+    viewModel: FavoritesModuleInstallationProgressViewModel = getViewModel()
 ) {
     val context = LocalContext.current
 

@@ -28,7 +28,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.Resource
 import com.mahmoud_darwish.ui_core.BookImage
@@ -36,6 +35,7 @@ import com.mahmoud_darwish.ui_core.ResourceComposable
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import org.koin.androidx.compose.getViewModel
 import java.text.DecimalFormat
 
 private val priceFormatter = DecimalFormat.getInstance()
@@ -45,7 +45,7 @@ private val priceFormatter = DecimalFormat.getInstance()
 fun Details(
     navigator: DestinationsNavigator,
     volumeId: String,
-    detailsViewModel: DetailsViewModel = hiltViewModel(),
+    detailsViewModel: DetailsViewModel = getViewModel(),
     context: Context = LocalContext.current
 ) {
     detailsViewModel.initialize(volumeId)

@@ -1,7 +1,7 @@
 package com.mahmoud_darwish.data.mapper
 
-import com.mahmoud_darwish.data.local.model.VolumeEntity
 import com.mahmoud_darwish.core.model.Volume
+import com.mahmoud_darwish.data.local.model.VolumeEntity
 
 fun Volume.toVolumeEntity(): VolumeEntity = VolumeEntity(
     id = this.id,

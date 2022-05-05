@@ -6,7 +6,7 @@ plugins {
 
     // Hilt
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    
 }
 
 android {
@@ -44,6 +44,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
     libraryVariants.all { variant ->
         kotlin.sourceSets {
             getByName(variant.name) {
@@ -56,7 +57,6 @@ android {
 dependencies {
     api(project(":core"))
 }
-
 
 apply from: "../build_shared_dependencies.gradle"
 apply from: "../build_shared_dependencies_compose.gradle"
