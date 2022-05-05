@@ -5,6 +5,8 @@ plugins {
     // Hilt
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -65,13 +67,6 @@ dependencies {
 // Preferences DataStore (SharedPreferences like APIs)
 dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
-}
-
-
-// needed for on-demand delivery of dynamic feature modules
-dependencies {
-    implementation 'com.google.android.play:core:1.10.3'
-    implementation 'com.google.android.play:core-ktx:1.8.1'
 }
 
 

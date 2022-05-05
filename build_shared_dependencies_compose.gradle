@@ -1,24 +1,28 @@
 dependencies {
     // Compose dependencies
     api "androidx.activity:activity-compose:1.6.0-alpha03"
+    api "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
+    api "com.google.accompanist:accompanist-swiperefresh:0.24.6-alpha"
+    api "androidx.activity:activity-compose:1.4.0"
+    api "androidx.hilt:hilt-navigation-compose:1.0.0"
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+
     api "androidx.compose.material:material-icons-extended:$compose_version"
     api "androidx.compose.material:material:$compose_version"
     api "androidx.compose.ui:ui-tooling-preview:$compose_version"
     api "androidx.compose.ui:ui:$compose_version"
-    api "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
-    api "com.google.accompanist:accompanist-swiperefresh:0.24.6-alpha"
-    api 'androidx.activity:activity-compose:1.4.0'
-    api 'androidx.hilt:hilt-navigation-compose:1.0.0'
-    api 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     debugApi "androidx.compose.ui:ui-tooling:$compose_version"
     debugApi "androidx.compose.ui:ui-test-manifest:$compose_version"
     androidTestApi "androidx.compose.ui:ui-test-junit4:$compose_version"
 
-    // Compose Nav Destinations
-    implementation 'io.github.raamcosta.compose-destinations:core:1.1.2-beta'
-    ksp 'io.github.raamcosta.compose-destinations:ksp:1.1.2-beta'
 }
 
 dependencies {
-    api "com.github.skydoves:landscapist-glide:1.5.1"
+    api "com.github.skydoves:landscapist-glide:$landscapist_glide_version"
+}
+
+dependencies {
+    // Compose Nav Destinations
+    implementation "io.github.raamcosta.compose-destinations:core:$compose_destinations_version"
+    ksp "io.github.raamcosta.compose-destinations:ksp:$compose_destinations_version"
 }
