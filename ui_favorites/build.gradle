@@ -53,9 +53,9 @@ android {
 
 dependencies {
     implementation project(":app")
-    implementation project(":core")
     implementation project(":data")
     implementation(project(':ui_core'))
+    implementation(project(':ui_main'))
 }
 
 dependencies {

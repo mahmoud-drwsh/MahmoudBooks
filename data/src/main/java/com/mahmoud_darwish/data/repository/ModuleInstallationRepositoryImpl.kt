@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 
-@Single
+@Single(binds = [IModuleInstallationRepository::class])
 class ModuleInstallationRepositoryImpl constructor(
     private val uiText: UiText,
     private val viewModelScope: CoroutineScope,
@@ -33,7 +33,7 @@ class ModuleInstallationRepositoryImpl constructor(
 
     override fun installModule() {
         if (_moduleName == null)
-            updateInstallationState(ModuleInstallationState.InstallError("Please provide a module name to install"))
+            updateInstallationState(ModuleInstallationState.InstallError(uiText.pleaseProvideModuleNameToInstall))
 
         viewModelScope.launch {
             val splitInstallManager = SplitInstallManagerFactory.create(app)
@@ -64,7 +64,7 @@ class ModuleInstallationRepositoryImpl constructor(
         }
     }
 
-    fun updateInstallationState(newState: ModuleInstallationState) {
+    private fun updateInstallationState(newState: ModuleInstallationState) {
         _installationState.value = newState
     }
 }

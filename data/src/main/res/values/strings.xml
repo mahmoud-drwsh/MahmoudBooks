@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="no_results_found_in_cache_error_message">The volume you\'re looking for was not found</string>
-    <string name="initial_search_term">kotlin</string>
+    <!--  The string value below is to be used when an initial value for the search
+          term needs to be set  -->
+    <string name="initial_search_term"></string>
     <string name="search_term_not_entered_error_message">Please enter a title to search for</string>
     <string name="no_results_found_error">No results were found</string>
     <string name="unknown_error_message">An unexpected error occurred</string>
@@ -10,4 +12,28 @@
     <string name="settings_navigation_bar_item_name">Settings</string>
     <string name="the_volume_was_not_found_error_message">The volume was not found</string>
     <string name="no_favorites_found_error_message">There are no favorites added</string>
+    <string name="title_activity_home_screen">HomeScreen</string>
+    <string name="empty_string" />
+    <string name="module_is_being_installed">The module is being installed</string>
+    <string name="module_has_been_installed">The module has been installed</string>
+    <string name="book_details">Book Details</string>
+    <string name="navigate_back_icon_content_description">navigate back</string>
+    <string name="toggle_bookmark_status_icon_content_description">toggle bookmark status</string>
+    <string name="results_source_message">Results source: %s</string>
+    <string name="remote">Remote</string>
+    <string name="cache">Cache</string>
+    <string name="refresh">Refresh</string>
+    <string name="pages">Pages</string>
+    <string name="about_the_book">About the book</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="buy_with_price_idr">Buy %s IDR</string>
+    <string name="price_idr">%s IDR</string>
+    <string name="rating_with_star">%s ★</string>
+    <string name="reviews_number">%s reviews</string>
+    <string name="install_module">Install module</string>
+    <string name="search_play_books">Search Play Books</string>
+    <string name="open_favorites_icon_description">open favorites</string>
+    <string name="provide_module_name_to_install_error_message">Please provide a module name to install</string>
+    <string name="favorites_count">Favorites count: %s</string>
+
 </resources>

@@ -24,22 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.mahmoud_darwish.core.model.Volume
-import com.mahmoud_darwish.core.util.Resource
+import com.mahmoud_darwish.core.util.CachedResource
+import com.mahmoud_darwish.data.R.string
 import com.mahmoud_darwish.ui_core.BookImage
 import com.mahmoud_darwish.ui_core.ResourceComposable
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
+import com.mahmoud_darwish.ui_core.util.priceFormatter
+import com.mahmoud_darwish.ui_main.compose_nav_graph.MainUiNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.getViewModel
-import java.text.DecimalFormat
 
-private val priceFormatter = DecimalFormat.getInstance()
 
+@MainUiNavGraph
 @Destination
 @Composable
 fun Details(
@@ -59,31 +62,36 @@ fun Details(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Book Details") },
+                title = { Text(text = stringResource(string.book_details)) },
                 navigationIcon = {
                     IconButton(onClick = { navigator.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "navigate back")
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = stringResource(string.navigate_back_icon_content_description)
+                        )
                     }
                 },
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp,
                 actions = {
-                    IconButton(onClick = { detailsViewModel.toggleFavoriteStatus() }) {
+                    IconButton(onClick = {
+                        detailsViewModel.onEvent(DetailsUiEvent.ToggleFavoriteStatus)
+                    }) {
 
                         Icon(
                             imageVector = if (isFavorite)
                                 Icons.Default.Bookmark
                             else
                                 Icons.Outlined.BookmarkBorder,
-                            contentDescription = "toggle bookmark status"
+                            contentDescription = stringResource(string.toggle_bookmark_status_icon_content_description)
                         )
                     }
                 }
             )
         }
     ) {
-        val collectAsState: Resource<Volume> by detailsViewModel.volumeResource.collectAsState(
-            Resource.Loading
+        val collectAsState: CachedResource<Volume> by detailsViewModel.volumeCachedResource.collectAsState(
+            CachedResource.Loading
         )
 
         collectAsState.ResourceComposable { volume: Volume, _ ->
@@ -137,7 +145,10 @@ fun Details(
                     }, modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "Buy ${priceFormatter.format(volume.price)} IDR",
+                        text = stringResource(
+                            id = string.buy_with_price_idr,
+                            priceFormatter.format(volume.price).toString()
+                        ),
                         style = MaterialTheme.typography.h6
                     )
                 }
@@ -150,14 +161,15 @@ fun Details(
                         .wrapContentHeight()
                 ) {
                     VolumeInfoRowBlock(
-                        "${volume.rating} ★", "${volume.reviewsNumber} reviews", Modifier
-                            .weight(1f)
+                        stringResource(id = string.rating_with_star, volume.rating.toString()),
+                        stringResource(id = string.reviews_number, volume.reviewsNumber.toString()),
+                        Modifier.weight(1f)
                     )
 
                     VolumeInfoRowDivider()
 
                     VolumeInfoRowBlock(
-                        "${volume.pages}", "Pages", Modifier
+                        volume.pages.toString(), stringResource(string.pages), Modifier
                             .weight(1f)
                     )
                 }
@@ -169,7 +181,10 @@ fun Details(
                         .background(Color.LightGray)
                 )
 
-                Text(text = "About the book", style = MaterialTheme.typography.h5)
+                Text(
+                    text = stringResource(string.about_the_book),
+                    style = MaterialTheme.typography.h5
+                )
 
                 Text(
                     text = AnnotatedString(volume.aboutTheBook),

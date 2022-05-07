@@ -1,6 +1,6 @@
 package com.mahmoud_darwish.ui_main.favorites
 
-import android.app.Application
+import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
@@ -12,13 +12,13 @@ import org.koin.android.annotation.KoinViewModel
 
 
 @KoinViewModel
-class FavoritesModuleInstallationProgressViewModel constructor(
-    private val IModuleInstallationRepository: IModuleInstallationRepository,
-    private val app: Application
+class FavoritesModuleInstallationScreenViewModel constructor(
+    private val IModuleInstallationRepository: IModuleInstallationRepository
 ) : ViewModel() {
 
     init {
         IModuleInstallationRepository.setModuleName(Constants.favoritesFeatureModuleName)
+        installModule() // TODO: remove to make the user install it manually
     }
 
     val installationState: StateFlow<ModuleInstallationState> =
@@ -26,13 +26,12 @@ class FavoritesModuleInstallationProgressViewModel constructor(
 
     fun installModule() = IModuleInstallationRepository.installModule()
 
-    fun goToFavorites() {
-        app.startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Constants.FeaturesMainActivityUriString.toUri()
-            ).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            })
+    fun goToFavorites(context: Context) {
+        val featuresLauncherActivityIntent = Intent(
+            Intent.ACTION_VIEW,
+            Constants.FeaturesMainActivityUriString.toUri()
+        )
+
+        context.startActivity(featuresLauncherActivityIntent)
     }
 }

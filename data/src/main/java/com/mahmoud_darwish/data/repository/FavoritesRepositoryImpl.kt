@@ -2,9 +2,9 @@ package com.mahmoud_darwish.data.repository
 
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IFavoritesRepository
-import com.mahmoud_darwish.core.util.Resource
+import com.mahmoud_darwish.core.util.CachedResource
 import com.mahmoud_darwish.core.util.Source
-import com.mahmoud_darwish.data.local.FavoriteEntityDao
+import com.mahmoud_darwish.data.local.dao.FavoriteEntityDao
 import com.mahmoud_darwish.data.local.model.Favorite
 import com.mahmoud_darwish.data.local.model.VolumeEntity
 import com.mahmoud_darwish.data.mapper.toVolumeList
@@ -16,20 +16,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 
-@Single
+@Single(binds = [IFavoritesRepository::class])
 class FavoritesRepositoryImpl constructor(
     private val favoriteEntityDao: FavoriteEntityDao,
     private val appIoScope: CoroutineScope,
     private val uiText: UiText
 ) : IFavoritesRepository {
 
-    override val favorites: Flow<Resource<List<Volume>>> = favoriteEntityDao
+    override val favorites: Flow<CachedResource<List<Volume>>> = favoriteEntityDao
         .getFavorites()
         .map { list: List<VolumeEntity> ->
             val volumeList = list.toVolumeList()
 
-            if (volumeList.isEmpty()) Resource.Error(uiText.noFavoritesFound)
-            else Resource.Success(volumeList, Source.CACHE)
+            if (volumeList.isEmpty()) CachedResource.Error(uiText.noFavoritesFound)
+            else CachedResource.Success(volumeList, Source.CACHE)
         }
 
     override fun toggleFavoriteStatus(currentVolumeId: String) {
@@ -44,7 +44,7 @@ class FavoritesRepositoryImpl constructor(
         }
     }
 
-    private suspend fun latestFavoriteStatus(currentVolumeId: String) =
+    private suspend fun latestFavoriteStatus(currentVolumeId: String): Boolean =
         favoriteEntityDao
             .isFavorite(currentVolumeId)
             .firstOrNull()

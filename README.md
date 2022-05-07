@@ -20,37 +20,32 @@ showing that we understand the concepts mentioned in the class up to the respect
 4. The average rating and number of ratings.
 5. The number of pages.
 6. A button to go to Google Play to buy the book.
-7. A button to mark the book as a favorite as vice versa.
+7. A button to mark the book as a favorite and vice versa.
 
 ## On the favorites screen, the user should be shown:
 
 1. A list of favorite books.
+   1. When the user clicks on one of the images, the details are shown as in the app's home screen 
 
-## On the settings screen, the user should be shown:
-
-1. An option for changing the UI mode from dark to light and vice versa.
-
-# The layers
+# The project modules
 
 The app has the following modules:
 
-1. The app module connects everything else to produce a working app.
-2. The data module responsible for everything to deal with data.
-3. The presentation layer responsible for the UI of the various screens.
-4. The domain layer which works as an added abstraction layer between the presentation and data
-   layers.
-5. The compose_components layer which contains various reusable Composables and contains the string
-   resources used in the UI.
-6. The favorites dynamic feature module which contains the code for showing the list of favorite
-   books.
+- The app module connects everything else to produce a working app.
+- The core module works as an added abstraction layer between the presentation and data layers.
+- The data module responsible for everything to deal with data.
+- The ui_core layer which contains various reusable Composables and contains the string resources used in the UI.
+- The main_ui module is responsible for the UI of the various screens needed for running the app.
+- The ui_favorites dynamic feature module which contains the code for showing the list of favorite books.
 
 ## The libraries
 
-1. Jetpack Compose.
-2. Room
-3. DataStore
-4. Retrofit
-5. Compose Destinations. The docs: https://composedestinations.rafaelcosta.xyz/
-6. Flows and coroutines.
-7. Hilt
-8. Landscapist Glide. https://github.com/skydoves/landscapist
+- Jetpack Compose. https://developer.android.com/jetpack/compose
+- Room. https://developer.android.com/training/data-storage/room
+- Retrofit. https://square.github.io/retrofit
+- Flows and coroutines. 
+  - https://kotlinlang.org/docs/flow.html
+  - https://kotlinlang.org/docs/coroutines-overview.html
+- Koin. https://insert-koin.io
+- Compose Destinations. The docs: https://composedestinations.rafaelcosta.xyz
+- Landscapist Glide. https://github.com/skydoves/landscapist

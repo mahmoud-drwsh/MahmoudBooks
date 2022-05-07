@@ -5,14 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.mahmoud_darwish.data.local.dao.FavoriteEntityDao
+import com.mahmoud_darwish.data.local.dao.VolumeEntityDao
 import com.mahmoud_darwish.data.local.model.Favorite
 import com.mahmoud_darwish.data.local.model.VolumeEntity
-
-private const val databaseFileName = "volume_db.db"
+import com.mahmoud_darwish.data.local.util.StringListConverters
+import com.mahmoud_darwish.data.local.util.databaseFileName
 
 
 @Database(entities = [VolumeEntity::class, Favorite::class], version = 1, exportSchema = false)
-@TypeConverters(AuthorsListConverters::class)
+@TypeConverters(StringListConverters::class)
 abstract class VolumeRoomDatabase : RoomDatabase() {
     abstract fun getVolumeEntityDao(): VolumeEntityDao
 

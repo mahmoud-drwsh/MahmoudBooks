@@ -1,3 +1,5 @@
+@file:Suppress("HardCodedStringLiteral")
+
 package com.mahmoud_darwish.data.remote
 
 // Base URL and the various paths
@@ -11,6 +13,9 @@ const val Q_PARAM = "q"
 const val MAX_RESULTS_PARAM = "maxResults"
 const val MAX_RESULTS_PARAM_DEFAULT_ARG = 40
 
+const val ID_PARAM = "id"
+const val VOLUMES_PATH_WITH_ID_PARAM = "$VOLUMES_PATH/{${ID_PARAM}}"
+
 // printType parameter
 const val PRINT_TYPE_PARAM = "printType"
 const val PRINT_TYPE_PARAM_DEFAULT_ARG = "books"
@@ -19,5 +24,6 @@ const val PRINT_TYPE_PARAM_DEFAULT_ARG = "books"
 const val FILTER_PARAM = "filter"
 const val FILTER_PARAM_DEFAULT_ARG = "paid-ebooks"
 
-// API key
-const val API_KEY = "AIzaSyCOBYgJhmtpkoxKN5UJtUxL_rinR4-ddRI"
+// filter parameter
+const val ORDER_BY_PARAM = "orderBy"
+const val ORDER_BY_PARAM_DEFAULT_ARG = "relevance"

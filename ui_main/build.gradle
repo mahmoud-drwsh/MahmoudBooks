@@ -2,11 +2,11 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 
-    id 'com.google.devtools.ksp' 
+    id 'com.google.devtools.ksp'
 
     // Hilt
     id 'kotlin-kapt'
-    
+
 }
 
 android {
@@ -58,9 +58,7 @@ android {
 }
 
 dependencies {
-    // although the data module is added as a dependency here, none of its concrete classes are accessed directly in the code.
     implementation(project(":data"))
-    implementation(project(":core"))
     implementation(project(':ui_core'))
 }
 

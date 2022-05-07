@@ -2,9 +2,9 @@ package com.mahmoud_darwish.data.repository
 
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
-import com.mahmoud_darwish.core.util.Resource
+import com.mahmoud_darwish.core.util.CachedResource
 import com.mahmoud_darwish.core.util.Source
-import com.mahmoud_darwish.data.local.VolumeEntityDao
+import com.mahmoud_darwish.data.local.dao.VolumeEntityDao
 import com.mahmoud_darwish.data.mapper.toVolume
 import com.mahmoud_darwish.data.mapper.toVolumeEntityList
 import com.mahmoud_darwish.data.mapper.toVolumeList
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 
 
-@Single
+@Single(binds = [IVolumeSearchRepository::class])
 class VolumeSearchRepositoryImpl constructor(
     private val service: GoogleBooksApi,
     private val volumeEntityDao: VolumeEntityDao,
@@ -35,8 +35,8 @@ class VolumeSearchRepositoryImpl constructor(
         performSearch()
     }
 
-    override val searchResult: MutableStateFlow<Resource<List<Volume>>> =
-        MutableStateFlow(Resource.Loading)
+    override val searchResult: MutableStateFlow<CachedResource<List<Volume>>> =
+        MutableStateFlow(CachedResource.Loading)
 
     private val _queryString: MutableStateFlow<String> =
         MutableStateFlow(uiText.initialSearchTerm)
@@ -72,7 +72,7 @@ class VolumeSearchRepositoryImpl constructor(
             val cachedResults = getCachedResults(newQuery)
 
             if (cachedResults.isNotEmpty())
-                emitResults(Resource.Success(cachedResults, Source.CACHE))
+                emitResults(CachedResource.Success(cachedResults, Source.CACHE))
             else
                 forceLoadingFromServer()
 
@@ -121,7 +121,7 @@ class VolumeSearchRepositoryImpl constructor(
 
 
     private fun emitResults(
-        success: Resource.Success<List<Volume>>
+        success: CachedResource.Success<List<Volume>>
     ) {
         searchResult.value = success
     }
@@ -143,23 +143,23 @@ class VolumeSearchRepositoryImpl constructor(
         // emitting the results after caching them to adhere to the single source of truth principle
         val serverRequestResults = getCachedResults(newQuery)
         // here the source is considered remote because the data is as fresh as possible.
-        val success = Resource.Success(serverRequestResults, Source.REMOTE)
+        val success = CachedResource.Success(serverRequestResults, Source.REMOTE)
 
         emitNewResultsOrErrorIfEmpty(success)
     }
 
-    private fun emitNewResultsOrErrorIfEmpty(results: Resource.Success<List<Volume>>) {
+    private fun emitNewResultsOrErrorIfEmpty(results: CachedResource.Success<List<Volume>>) {
         if (results.data.isEmpty()) emitError(uiText.noResultsFoundError)
         else emitResults(results)
     }
 
     private fun emitError(message: String?) {
         searchResult.value =
-            Resource.Error(message ?: uiText.unknownErrorMessage)
+            CachedResource.Error(message ?: uiText.unknownErrorMessage)
     }
 
     private fun emitLoading() {
-        searchResult.value = Resource.Loading
+        searchResult.value = CachedResource.Loading
     }
 
     private suspend fun emitLoadingAndValidateQueryStringOrEmitError(

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IFavoritesRepository
 import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
-import com.mahmoud_darwish.core.util.Resource
+import com.mahmoud_darwish.core.util.CachedResource
 import com.mahmoud_darwish.core.util.Source
 import com.mahmoud_darwish.data.util.UiText
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +25,8 @@ class DetailsViewModel constructor(
     private var currentVolumeId: String = ""
 
     var isFavorite: Flow<Boolean> = MutableStateFlow(false)
-    val volumeResource: MutableStateFlow<Resource<Volume>> = MutableStateFlow(Resource.Loading)
+    val volumeCachedResource: MutableStateFlow<CachedResource<Volume>> =
+        MutableStateFlow(CachedResource.Loading)
 
     fun initialize(id: String) {
         currentVolumeId = id
@@ -36,20 +37,26 @@ class DetailsViewModel constructor(
     }
 
     private fun loadVolume() {
-        volumeResource.value = Resource.Loading
+        volumeCachedResource.value = CachedResource.Loading
 
         viewModelScope.launch {
             try {
                 val volumeById: Volume = repo.getVolumeById(currentVolumeId)
-                volumeResource.value = Resource.Success(volumeById, Source.CACHE)
+                volumeCachedResource.value = CachedResource.Success(volumeById, Source.CACHE)
             } catch (e: Exception) {
                 e.printStackTrace()
 
-                volumeResource.value =
-                    Resource.Error(uiText.theVolumeWasNotFoundErrorMessage)
+                volumeCachedResource.value =
+                    CachedResource.Error(uiText.theVolumeWasNotFoundErrorMessage)
             }
         }
     }
 
-    fun toggleFavoriteStatus() = favoritesRepo.toggleFavoriteStatus(currentVolumeId)
+    fun onEvent(detailsUiEvent: DetailsUiEvent) = when (detailsUiEvent) {
+        DetailsUiEvent.ToggleFavoriteStatus -> favoritesRepo.toggleFavoriteStatus(currentVolumeId)
+    }
+}
+
+sealed class DetailsUiEvent {
+    object ToggleFavoriteStatus : DetailsUiEvent()
 }

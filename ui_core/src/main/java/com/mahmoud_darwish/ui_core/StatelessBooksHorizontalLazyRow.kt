@@ -10,22 +10,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.mahmoud_darwish.core.model.Volume
+import com.mahmoud_darwish.data.R
 import com.mahmoud_darwish.ui_core.theme.imageHeight
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
-import java.text.DecimalFormat
+import com.mahmoud_darwish.ui_core.util.priceFormatter
 import java.text.NumberFormat
 
 @Composable
 fun StatelessBooksHorizontalLazyRow(
     volumesList: List<Volume>,
-    numberFormat: NumberFormat = remember { DecimalFormat.getInstance() },
+    numberFormat: NumberFormat = priceFormatter,
     onItemClick: (Volume) -> Unit
 ) {
     LazyRow(
@@ -47,7 +48,10 @@ fun StatelessBooksHorizontalLazyRow(
                     contentScale = ContentScale.FillHeight
                 ) { onItemClick(volume) }
                 Text(
-                    text = "${numberFormat.format(volume.price)} IDR",
+                    text = stringResource(
+                        id = R.string.price_idr,
+                        numberFormat.format(volume.price)
+                    ),
                     style = MaterialTheme.typography.caption.copy(fontSize = 17.sp)
                 )
             }

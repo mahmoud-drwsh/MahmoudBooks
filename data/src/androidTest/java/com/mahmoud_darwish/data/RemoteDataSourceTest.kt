@@ -18,16 +18,19 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class RemoteDataSourceTest {
-    lateinit var googleBooksApi: GoogleBooksApi
+    private lateinit var googleBooksApi: GoogleBooksApi
+
+    private val searchTerm = "kotlin"
 
     @Before
     fun prepareRetrofitInstance() {
         googleBooksApi = getBooksServiceInstance()
     }
 
+
     @Test
     fun apiReturnsANonEmptyListOfResults() = runBlocking {
-        val search = googleBooksApi.search("kotlin")
+        val search = googleBooksApi.search(searchTerm)
 
         // assert the volumeDtos list is not empty
         assertTrue(search.items.isNotEmpty())
@@ -39,7 +42,7 @@ class RemoteDataSourceTest {
     @Test
     fun apiReturnsRightVolume() = runBlocking {
         /*
-        The following books will be requested from the API and will be ensured that the titles match the ID's
+        The following books will be requested from the API and will be ensured that the titles match the ID'AppIoCoroutineScope
         * */
         val books: Map<String, String> = mapOf(
             /*      ID               Title       */
@@ -53,7 +56,7 @@ class RemoteDataSourceTest {
 
             assertEquals(book.value, volume.volumeInfo.title)
 
-            // The delay is for not letting the server think it's being attacked :)
+            // The delay is for not letting the server think it'AppIoCoroutineScope being attacked :)
             val subsequentRequestDelayTime: Long = 500
             delay(subsequentRequestDelayTime)
         }

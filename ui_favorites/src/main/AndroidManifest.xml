@@ -16,7 +16,7 @@
     <application
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".FavoritesActivity"
+            android:name=".FavoritesDynamicFeatureModuleMainActivity"
             android:exported="true"
             android:label="@string/title_activity_favorites"
             android:theme="@style/Theme.MahmoudBooks">

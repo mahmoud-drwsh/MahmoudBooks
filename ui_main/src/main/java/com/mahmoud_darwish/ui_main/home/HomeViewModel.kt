@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
-import com.mahmoud_darwish.core.util.Resource
+import com.mahmoud_darwish.core.util.CachedResource
+import com.mahmoud_darwish.core.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
 @KoinViewModel
 class HomeViewModel constructor(
@@ -19,27 +22,27 @@ class HomeViewModel constructor(
 
     val query: StateFlow<String> = volumeSearchRepo.query
 
-    val searchResult: Flow<Resource<List<Volume>>> = volumeSearchRepo.searchResult
+    val searchResult: Flow<CachedResource<List<Volume>>> = volumeSearchRepo.searchResult
 
-    private var homeUiState = MutableStateFlow<HomeUIState<List<Volume>>>(HomeUIState(query = ""))
+    private var homeUiState = MutableStateFlow<HomeUIState<List<Volume>>>(HomeUIState(query = Constants.EMPTY_STRING))
 
     init {
         viewModelScope.launch {
             volumeSearchRepo.searchResult
-                .combine(volumeSearchRepo.query) { resource: Resource<List<Volume>>, query: String ->
-                    homeUiState.value = when (resource) {
-                        is Resource.Error -> homeUiState.value.copy(
-                            errorMessage = resource.message,
+                .combine(volumeSearchRepo.query) { cachedResource: CachedResource<List<Volume>>, query: String ->
+                    homeUiState.value = when (cachedResource) {
+                        is CachedResource.Error -> homeUiState.value.copy(
+                            errorMessage = cachedResource.message,
                             query = query
                         )
-                        is Resource.Loading -> homeUiState.value.copy(
+                        is CachedResource.Loading -> homeUiState.value.copy(
                             isLoading = true,
                             query = query
                         )
-                        is Resource.Success -> {
+                        is CachedResource.Success -> {
                             homeUiState.value.copy(
                                 isLoading = false,
-                                data = resource.data,
+                                data = cachedResource.data,
                                 errorMessage = null,
                                 query = query
                             )
@@ -69,3 +72,7 @@ sealed class HomeUIEvent {
     data class UpdateQuery(val query: String) : HomeUIEvent()
     object ForceLoadingFromServer : HomeUIEvent()
 }
+
+@Module
+@ComponentScan("com.mahmoud_darwish.ui_main")
+class MainUiModule

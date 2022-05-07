@@ -1,6 +1,6 @@
 package com.mahmoud_darwish.ui_main.favorites
 
-import android.content.Intent
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,32 +8,36 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.mahmoud_darwish.core.model.ModuleInstallationState
-import com.mahmoud_darwish.core.util.Constants
+import com.mahmoud_darwish.data.R
 import com.mahmoud_darwish.ui_core.CenteredContent
+import com.mahmoud_darwish.ui_core.CenteredText
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
+import com.mahmoud_darwish.ui_main.compose_nav_graph.MainUiNavGraph
+import com.mahmoud_darwish.ui_main.destinations.HomeContentDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.getViewModel
 
+@MainUiNavGraph
 @Destination
 @Composable
-fun FavoritesModuleInstallationProgress(
+fun FavoritesModuleInstallationScreen(
     navigator: DestinationsNavigator,
-    viewModel: FavoritesModuleInstallationProgressViewModel = getViewModel()
+    viewModel: FavoritesModuleInstallationScreenViewModel = getViewModel()
 ) {
     val context = LocalContext.current
 
-    val collectAsState: ModuleInstallationState by viewModel
+    val moduleInstallationState: ModuleInstallationState by viewModel
         .installationState
         .collectAsState(ModuleInstallationState.Loading)
 
@@ -42,16 +46,16 @@ fun FavoritesModuleInstallationProgress(
             TopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navigator.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "navigate back")
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.navigate_back_icon_content_description)
+                        )
                     }
                 },
                 title = {},
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp
             )
-        },
-        bottomBar = {
-
         }
     ) {
         CenteredContent {
@@ -61,27 +65,17 @@ fun FavoritesModuleInstallationProgress(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(mediumPadding)
             ) {
-
-                if (collectAsState !is ModuleInstallationState.Installed)
-                    Button(onClick = { viewModel.installModule() }) {
-                        Text(text = "Install module")
+                when (moduleInstallationState) {
+                    is ModuleInstallationState.Installed -> {
+                        GoToFavoritesScreenAndRemoveCurrentBackstackEntry(
+                            viewModel, context, navigator
+                        )
                     }
-                else {
-                    Text(
-                        text = collectAsState.progressMessage(),
-                        style = MaterialTheme.typography.h6,
-                        textAlign = TextAlign.Center
-                    )
-                    Button(onClick = { /*viewModel.goToFavorites()*/
-                        context.startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Constants.FeaturesMainActivityUriString.toUri()
-                            ).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            })
-                    }) {
-                        Text(text = "Open")
+                    !is ModuleInstallationState.Installed -> Button(onClick = { viewModel.installModule() }) {
+                        Text(text = stringResource(R.string.install_module))
+                    }
+                    else -> {
+                        CenteredText(message = moduleInstallationState.progressMessage())
                     }
                 }
             }
@@ -89,9 +83,15 @@ fun FavoritesModuleInstallationProgress(
     }
 }
 
-fun ModuleInstallationState.progressMessage(): String = when (this) {
-    ModuleInstallationState.Loading -> "The module is being installed"
-    is ModuleInstallationState.Installed -> "The module has been installed"
-    is ModuleInstallationState.InstallError -> message ?: ""
+@Composable
+fun GoToFavoritesScreenAndRemoveCurrentBackstackEntry(
+    viewModel: FavoritesModuleInstallationScreenViewModel,
+    context: Context,
+    navigator: DestinationsNavigator
+) {
+    LaunchedEffect(true) {
+        navigator.popBackStack(route = HomeContentDestination.route, inclusive = false)
+        viewModel.goToFavorites(context)
+    }
 }
 

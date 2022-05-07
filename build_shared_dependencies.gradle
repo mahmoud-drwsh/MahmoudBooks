@@ -11,11 +11,10 @@ dependencies {
 dependencies {
     // Koin main features for Android
     implementation "io.insert-koin:koin-android:$koin_version"
-    // Navigation Graph
-    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
     // Jetpack Compose
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
     // Annotations
     implementation "io.insert-koin:koin-annotations:$koin_ksp_version"
+
     ksp "io.insert-koin:koin-ksp-compiler:$koin_ksp_version"
 }

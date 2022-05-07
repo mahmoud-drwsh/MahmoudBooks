@@ -1,4 +1,4 @@
-package com.mahmoud_darwish.data.local
+package com.mahmoud_darwish.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -9,6 +9,8 @@ import org.koin.core.annotation.Single
 class UiText constructor(val app: Application) {
     private fun getStringForId(@StringRes id: Int): String = app.getString(id)
 
+    val pleaseProvideModuleNameToInstall: String
+        get() = getStringForId(R.string.provide_module_name_to_install_error_message)
     val noFavoritesFound: String
         get() = getStringForId(R.string.no_favorites_found_error_message)
     val theVolumeWasNotFoundErrorMessage: String
@@ -21,6 +23,4 @@ class UiText constructor(val app: Application) {
         get() = getStringForId(R.string.no_results_found_error)
     val searchTermNotEnteredErrorMessage: String
         get() = getStringForId(R.string.search_term_not_entered_error_message)
-    val noResultsFoundInCacheErrorMessage: String
-        get() = getStringForId(R.string.no_results_found_in_cache_error_message)
 }
