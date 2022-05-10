@@ -25,7 +25,8 @@ interface GoogleBooksApi {
 }
 
 /**
- * This function will be used by the DI lib for creating a single instance of the service which will be the one used while the app is running
+ * This function will be used by the dependency injection library for creating a single instance of
+ * the service which will be the one used while the app is running.
  * */
 fun getBooksServiceInstance(): GoogleBooksApi = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())

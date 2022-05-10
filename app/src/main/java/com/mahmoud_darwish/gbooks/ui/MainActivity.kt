@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.mahmoud_darwish.ui_core.theme.MahmoudBooksTheme
-import com.mahmoud_darwish.ui_main.home.Home
+import com.mahmoud_darwish.ui_main.home.AppMainComposable
 
 class MainActivity : ComponentActivity() {
 
@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MahmoudBooksTheme { Home() }
+            MahmoudBooksTheme { AppMainComposable() }
         }
     }
 }

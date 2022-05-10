@@ -12,27 +12,27 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
 
 @KoinViewModel
-class HomeViewModel constructor(
+class HomeViewModel(
     private val volumeSearchRepo: IVolumeSearchRepository
 ) : ViewModel() {
 
-    val query: StateFlow<String> = volumeSearchRepo.query
+    val query: StateFlow<String> = volumeSearchRepo.queryStringFlow
 
-    val searchResult: Flow<CachedResource<List<Volume>>> = volumeSearchRepo.searchResult
+    val searchResult: Flow<CachedResource<List<Volume>>> =
+        volumeSearchRepo.searchResultsResourceFlow
 
-    private var homeUiState = MutableStateFlow<HomeUIState<List<Volume>>>(HomeUIState(query = Constants.EMPTY_STRING))
+    private var homeUiState =
+        MutableStateFlow<HomeUIState<List<Volume>>>(HomeUIState(query = Constants.EMPTY_STRING))
 
     init {
         viewModelScope.launch {
-            volumeSearchRepo.searchResult
-                .combine(volumeSearchRepo.query) { cachedResource: CachedResource<List<Volume>>, query: String ->
+            volumeSearchRepo.searchResultsResourceFlow
+                .combine(volumeSearchRepo.queryStringFlow) { cachedResource: CachedResource<List<Volume>>, query: String ->
                     homeUiState.value = when (cachedResource) {
                         is CachedResource.Error -> homeUiState.value.copy(
-                            errorMessage = cachedResource.message,
+                            errorMessage = cachedResource.errorMessage,
                             query = query
                         )
                         is CachedResource.Loading -> homeUiState.value.copy(
@@ -56,10 +56,13 @@ class HomeViewModel constructor(
         is HomeUIEvent.UpdateQuery -> {
             volumeSearchRepo.setSearchQuery(homeUIEvent.query)
         }
-        is HomeUIEvent.ForceLoadingFromServer -> volumeSearchRepo.forceLoadingFromServer()
+        is HomeUIEvent.ForceLoadingFromServer -> volumeSearchRepo.forceLoadingFromRemoteSource()
     }
 }
 
+/**
+ * This is used to model the various states of the Home UI
+ * */
 data class HomeUIState<T>(
     val query: String,
     val isLoading: Boolean = true,
@@ -68,11 +71,11 @@ data class HomeUIState<T>(
     val data: T? = null,
 )
 
+/**
+ * This is used to model the various interactions between the UI and the ViewModel
+ * */
 sealed class HomeUIEvent {
     data class UpdateQuery(val query: String) : HomeUIEvent()
     object ForceLoadingFromServer : HomeUIEvent()
 }
 
-@Module
-@ComponentScan("com.mahmoud_darwish.ui_main")
-class MainUiModule

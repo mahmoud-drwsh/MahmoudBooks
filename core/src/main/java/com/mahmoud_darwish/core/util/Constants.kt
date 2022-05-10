@@ -3,9 +3,12 @@
 package com.mahmoud_darwish.core.util
 
 object Constants {
+    /**
+     * The purpose of this constant is just making the code a bit easier to read.
+     * */
     const val EMPTY_STRING: String = ""
 
-    // TODO: this value exists in two different places and this violates the single source of truth principle, thus, I need to find a way to make this declared in only one place and referenced where needed by its variable.
+    // these will be used to navigate to dynamic feature module main activity
     const val favoritesFeatureModuleName = "ui_favorites"
     const val FeaturesMainActivityUriString = "mahmoud_books://favorites"
 }

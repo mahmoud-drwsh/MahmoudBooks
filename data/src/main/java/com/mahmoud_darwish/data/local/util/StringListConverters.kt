@@ -4,6 +4,9 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+/**
+ * This is needed to make Room able to save lists of strings
+ * */
 class StringListConverters {
     @TypeConverter
     fun listToJsonString(authors: List<String>): String {

@@ -7,8 +7,22 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface IVolumeSearchRepository {
     fun setSearchQuery(title: String)
-    val searchResult: Flow<CachedResource<List<Volume>>>
-    val query: StateFlow<String>
-    suspend fun getVolumeById(id: String): Volume
-    fun forceLoadingFromServer()
+
+    suspend fun getVolumeById(volumeId: String): Volume
+
+    /**
+     * This flow will contain the results of the search =,
+     * */
+    val searchResultsResourceFlow: Flow<CachedResource<List<Volume>>>
+
+    /**
+     * This flow will contain the string set with the method setSearchQuery.
+     * */
+    val queryStringFlow: StateFlow<String>
+
+    /**
+     * This is used when the user refreshes the page in order to ensure that the data the user
+     * is shown later is directly from the remote source
+     * */
+    fun forceLoadingFromRemoteSource()
 }

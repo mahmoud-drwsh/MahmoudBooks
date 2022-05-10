@@ -6,7 +6,7 @@ import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IFavoritesRepository
 import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
 import com.mahmoud_darwish.core.util.CachedResource
-import com.mahmoud_darwish.core.util.Source
+import com.mahmoud_darwish.core.util.ResponseSource
 import com.mahmoud_darwish.data.util.UiText
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +17,8 @@ import org.koin.android.annotation.KoinViewModel
  * The use of this viewModel requires setting the ID of the volume to show the details of using the initialize function before it can function as expected
  * */
 @KoinViewModel
-class DetailsViewModel constructor(
-    private val repo: IVolumeSearchRepository,
+class DetailsViewModel(
+    private val searchRepository: IVolumeSearchRepository,
     private val favoritesRepo: IFavoritesRepository,
     private val uiText: UiText
 ) : ViewModel() {
@@ -31,7 +31,7 @@ class DetailsViewModel constructor(
     fun initialize(id: String) {
         currentVolumeId = id
 
-        isFavorite = favoritesRepo.isVolumeFavorite(currentVolumeId)
+        isFavorite = favoritesRepo.isVolumeFavoriteFlow(currentVolumeId)
 
         loadVolume()
     }
@@ -41,8 +41,9 @@ class DetailsViewModel constructor(
 
         viewModelScope.launch {
             try {
-                val volumeById: Volume = repo.getVolumeById(currentVolumeId)
-                volumeCachedResource.value = CachedResource.Success(volumeById, Source.CACHE)
+                val volumeById: Volume = searchRepository.getVolumeById(currentVolumeId)
+                volumeCachedResource.value =
+                    CachedResource.Success(volumeById, ResponseSource.CACHE)
             } catch (e: Exception) {
                 e.printStackTrace()
 
@@ -57,6 +58,9 @@ class DetailsViewModel constructor(
     }
 }
 
+/**
+ * This is used to model the various interactions between the UI and the ViewModel
+ * */
 sealed class DetailsUiEvent {
     object ToggleFavoriteStatus : DetailsUiEvent()
 }

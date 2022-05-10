@@ -3,7 +3,7 @@ package com.mahmoud_darwish.data.repository
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.repository.IVolumeSearchRepository
 import com.mahmoud_darwish.core.util.CachedResource
-import com.mahmoud_darwish.core.util.Source
+import com.mahmoud_darwish.core.util.ResponseSource
 import com.mahmoud_darwish.data.local.dao.VolumeEntityDao
 import com.mahmoud_darwish.data.mapper.toVolume
 import com.mahmoud_darwish.data.mapper.toVolumeEntityList
@@ -20,7 +20,7 @@ import org.koin.core.annotation.Single
 
 
 @Single(binds = [IVolumeSearchRepository::class])
-class VolumeSearchRepositoryImpl constructor(
+class VolumeSearchRepositoryImpl(
     private val service: GoogleBooksApi,
     private val volumeEntityDao: VolumeEntityDao,
     private val uiText: UiText,
@@ -35,12 +35,12 @@ class VolumeSearchRepositoryImpl constructor(
         performSearch()
     }
 
-    override val searchResult: MutableStateFlow<CachedResource<List<Volume>>> =
+    override val searchResultsResourceFlow: MutableStateFlow<CachedResource<List<Volume>>> =
         MutableStateFlow(CachedResource.Loading)
 
     private val _queryString: MutableStateFlow<String> =
         MutableStateFlow(uiText.initialSearchTerm)
-    override val query: StateFlow<String> = _queryString
+    override val queryStringFlow: StateFlow<String> = _queryString
 
     /*
      * below, the program will try to search the cache, then if results were not found,
@@ -57,6 +57,10 @@ class VolumeSearchRepositoryImpl constructor(
     private fun performSearch() {
         job?.cancel()
         job = scope.launch {
+            /**
+             * This delay is added so that only when the user stops typing for 500 milliseconds,
+             * the search would be executed.
+             * */
             delay(500L)
 
             emitLoadingAndValidateQueryStringOrEmitError { newQuery ->
@@ -72,9 +76,9 @@ class VolumeSearchRepositoryImpl constructor(
             val cachedResults = getCachedResults(newQuery)
 
             if (cachedResults.isNotEmpty())
-                emitResults(CachedResource.Success(cachedResults, Source.CACHE))
+                emitResults(CachedResource.Success(cachedResults, ResponseSource.CACHE))
             else
-                forceLoadingFromServer()
+                forceLoadingFromRemoteSource()
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -92,11 +96,11 @@ class VolumeSearchRepositoryImpl constructor(
     * Since all the requested results will be cached, when a user wants to view a specific volume,
     * the volume can be found in the cache.
     * */
-    override suspend fun getVolumeById(id: String): Volume =
-        volumeEntityDao.getVolumeEntity(id).toVolume()
+    override suspend fun getVolumeById(volumeId: String): Volume =
+        volumeEntityDao.getVolumeEntity(volumeId).toVolume()
 
 
-    override fun forceLoadingFromServer() {
+    override fun forceLoadingFromRemoteSource() {
         scope.launch {
             emitLoading()
 
@@ -119,13 +123,17 @@ class VolumeSearchRepositoryImpl constructor(
     private suspend fun getCachedResults(query: String) =
         volumeEntityDao.volumeSearch(query).toVolumeList()
 
-
-    private fun emitResults(
-        success: CachedResource.Success<List<Volume>>
-    ) {
-        searchResult.value = success
+    /**
+     * Encapsulation of the logic of publishing the results to the listeners
+     * */
+    private fun emitResults(success: CachedResource.Success<List<Volume>>) {
+        searchResultsResourceFlow.value = success
     }
 
+    /**
+     * This function encapsulated the logic of requesting data, caching it, and passing it up to the requester.
+     * The reason this is needed is to make sure that the single source of truth principle is applied.
+     * */
     private suspend fun loadAndCacheNewResults(newQuery: String) {
         // searching with the Google books service
         val volumesToCache =
@@ -140,34 +148,41 @@ class VolumeSearchRepositoryImpl constructor(
     private suspend fun emitNewlyCachedResults(
         newQuery: String
     ) {
-        // emitting the results after caching them to adhere to the single source of truth principle
+        // emitting the results after caching them to adhere to the single responseSource of truth principle
         val serverRequestResults = getCachedResults(newQuery)
-        // here the source is considered remote because the data is as fresh as possible.
-        val success = CachedResource.Success(serverRequestResults, Source.REMOTE)
+        // here the responseSource is considered remote because the data is as fresh as possible.
+        val success = CachedResource.Success(serverRequestResults, ResponseSource.REMOTE)
 
         emitNewResultsOrErrorIfEmpty(success)
     }
 
+    /**
+     * This function encapsulates the logic for handling empty responses from the data layer.
+     * */
     private fun emitNewResultsOrErrorIfEmpty(results: CachedResource.Success<List<Volume>>) {
         if (results.data.isEmpty()) emitError(uiText.noResultsFoundError)
         else emitResults(results)
     }
 
     private fun emitError(message: String?) {
-        searchResult.value =
+        searchResultsResourceFlow.value =
             CachedResource.Error(message ?: uiText.unknownErrorMessage)
     }
 
     private fun emitLoading() {
-        searchResult.value = CachedResource.Loading
+        searchResultsResourceFlow.value = CachedResource.Loading
     }
 
+    /**
+     * This function encapsulates the logic for handling the cases when the string is invalid.
+     * @param onValidValue is invoked in case the query string is a valid one.
+     * */
     private suspend fun emitLoadingAndValidateQueryStringOrEmitError(
         onValidValue: suspend (query: String) -> Unit,
     ) {
         emitLoading()
 
-        val queryString = query.value.trim().lowercase()
+        val queryString = queryStringFlow.value.trim().lowercase()
 
         if (queryString.isNotBlank()) {
             onValidValue(queryString)

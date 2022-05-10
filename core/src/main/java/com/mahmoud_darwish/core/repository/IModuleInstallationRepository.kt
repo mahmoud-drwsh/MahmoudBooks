@@ -5,6 +5,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface IModuleInstallationRepository {
     fun setModuleName(moduleName: String)
-    fun installModule()
-    val installationState: StateFlow<ModuleInstallationState>
+    val installationStateFlow: StateFlow<ModuleInstallationState>
+
+    /**
+     * By calling this functions
+     * */
+    fun installModuleAndInstallationStateUpdated()
 }

@@ -16,9 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.CachedResource
-import com.mahmoud_darwish.core.util.Source
+import com.mahmoud_darwish.core.util.ResponseSource
 import com.mahmoud_darwish.data.R.string
-import com.mahmoud_darwish.ui_core.ResourceComposable
+import com.mahmoud_darwish.ui_core.Composable
 import com.mahmoud_darwish.ui_core.StatelessBooksHorizontalLazyRow
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.mahmoud_darwish.ui_main.NavGraphs
@@ -32,7 +32,7 @@ import org.koin.androidx.compose.getViewModel
 
 
 @Composable
-fun Home() {
+fun AppMainComposable() {
     DestinationsNavHost(navGraph = NavGraphs.root)
 }
 
@@ -77,7 +77,7 @@ private fun SearchResultsSection(
     onRefreshClicked: () -> Unit,
     onItemClicked: (Volume) -> Unit
 ) {
-    data.ResourceComposable { volumesList, source ->
+    data.Composable { volumesList, source ->
 
         Column(verticalArrangement = spacedBy(mediumPadding)) {
 
@@ -90,7 +90,7 @@ private fun SearchResultsSection(
 
 @Composable
 private fun DataSourceInformationRow(
-    source: Source,
+    responseSource: ResponseSource,
     onRefreshClicked: () -> Unit
 ) {
     Row(
@@ -100,9 +100,9 @@ private fun DataSourceInformationRow(
     ) {
         Text(
             text = stringResource(
-                id = string.results_source_message, when (source) {
-                    Source.REMOTE -> stringResource(string.remote)
-                    Source.CACHE -> stringResource(string.cache)
+                id = string.results_source_message, when (responseSource) {
+                    ResponseSource.REMOTE -> stringResource(string.remote)
+                    ResponseSource.CACHE -> stringResource(string.cache)
                 }
             ),
             modifier = Modifier.padding(horizontal = mediumPadding),

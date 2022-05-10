@@ -78,14 +78,14 @@ data class VolumeDto(
     ) {
         data class ListPrice(
             @SerializedName("amount")
-            val amount: Int = 0,
+            val amount: Double = 0.0,
             @SerializedName("currencyCode")
             val currencyCode: String = ""
         )
 
         data class Offer(
             @SerializedName("finskyOfferType")
-            val finskyOfferType: Int = 0,
+            val finskyOfferType: Double = 0.0,
             @SerializedName("listPrice")
             val listPrice: ListPrice = ListPrice(),
             @SerializedName("retailPrice")
@@ -93,14 +93,14 @@ data class VolumeDto(
         ) {
             data class ListPrice(
                 @SerializedName("amountInMicros")
-                val amountInMicros: Long = 0,
+                val amountInMicros: Double = 0.0,
                 @SerializedName("currencyCode")
                 val currencyCode: String = ""
             )
 
             data class RetailPrice(
                 @SerializedName("amountInMicros")
-                val amountInMicros: Long = 0,
+                val amountInMicros: Double = 0.0,
                 @SerializedName("currencyCode")
                 val currencyCode: String = ""
             )
@@ -108,7 +108,7 @@ data class VolumeDto(
 
         data class RetailPrice(
             @SerializedName("amount")
-            val amount: Int = 0,
+            val amount: Double = 0.0,
             @SerializedName("currencyCode")
             val currencyCode: String = ""
         )
@@ -145,7 +145,7 @@ data class VolumeDto(
         @SerializedName("maturityRating")
         val maturityRating: String = "",
         @SerializedName("pageCount")
-        val pageCount: Int = 0,
+        val pageCount: Double = 0.0,
         @SerializedName("panelizationSummary")
         val panelizationSummary: PanelizationSummary = PanelizationSummary(),
         @SerializedName("previewLink")
@@ -157,7 +157,7 @@ data class VolumeDto(
         @SerializedName("publisher")
         val publisher: String = "",
         @SerializedName("ratingsCount")
-        val ratingsCount: Int = 0,
+        val ratingsCount: Double = 0.0,
         @SerializedName("readingModes")
         val readingModes: ReadingModes = ReadingModes(),
         @SerializedName("subtitle")

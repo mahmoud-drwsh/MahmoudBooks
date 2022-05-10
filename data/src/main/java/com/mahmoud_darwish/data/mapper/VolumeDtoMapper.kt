@@ -4,7 +4,8 @@ import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.data.remote.model.VolumeDto
 
 /*
-* Here we have only just a mapper from a DTO to a domain model and not the other way around as well because we'll not need in this app to map a domain model to a DTO.
+* Here we have only just a mapper from a DTO to a domain model and not the other way around as well
+* because we'll not need in this app to map a domain model to a DTO.
 * */
 
 fun VolumeDto.toVolume(): Volume = Volume(

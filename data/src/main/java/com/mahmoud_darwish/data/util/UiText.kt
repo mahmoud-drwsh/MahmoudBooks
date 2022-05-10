@@ -6,7 +6,7 @@ import com.mahmoud_darwish.data.R
 import org.koin.core.annotation.Single
 
 @Single
-class UiText constructor(val app: Application) {
+class UiText(val app: Application) {
     private fun getStringForId(@StringRes id: Int): String = app.getString(id)
 
     val pleaseProvideModuleNameToInstall: String

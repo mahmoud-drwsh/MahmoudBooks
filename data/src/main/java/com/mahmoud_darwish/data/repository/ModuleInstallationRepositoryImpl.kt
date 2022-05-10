@@ -13,25 +13,31 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 
 @Single(binds = [IModuleInstallationRepository::class])
-class ModuleInstallationRepositoryImpl constructor(
+class ModuleInstallationRepositoryImpl(
     private val uiText: UiText,
     private val viewModelScope: CoroutineScope,
     private val app: Application
 ) : IModuleInstallationRepository {
 
+    /**
+     * The name of the module to install.
+     * */
     private var _moduleName: String? = null
 
     private val _installationState: MutableStateFlow<ModuleInstallationState> =
         MutableStateFlow(ModuleInstallationState.Loading)
 
-    override val installationState: StateFlow<ModuleInstallationState>
+    override val installationStateFlow: StateFlow<ModuleInstallationState>
         get() = _installationState
 
+    /**
+     * This must be called before installModule is invoked to set the name of the module to install.
+     * */
     override fun setModuleName(moduleName: String) {
         _moduleName = moduleName
     }
 
-    override fun installModule() {
+    override fun installModuleAndInstallationStateUpdated() {
         if (_moduleName == null)
             updateInstallationState(ModuleInstallationState.InstallError(uiText.pleaseProvideModuleNameToInstall))
 
@@ -64,6 +70,9 @@ class ModuleInstallationRepositoryImpl constructor(
         }
     }
 
+    /**
+     * This is used to make the code more readable.
+     * */
     private fun updateInstallationState(newState: ModuleInstallationState) {
         _installationState.value = newState
     }

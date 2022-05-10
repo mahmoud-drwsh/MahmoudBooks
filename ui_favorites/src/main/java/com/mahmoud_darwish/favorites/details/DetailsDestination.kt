@@ -5,6 +5,10 @@ import com.mahmoud_darwish.favorites.compose_nav_graph.FavoritesNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+/**
+ * This is needed because the other module that contains the main nav graph, can't access
+ * ui_favorites as a dependency at the time of nav graph generation
+ * */
 @FavoritesNavGraph
 @Destination
 @Composable

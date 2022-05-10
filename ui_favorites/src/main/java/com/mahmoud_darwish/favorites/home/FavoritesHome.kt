@@ -18,7 +18,7 @@ import com.mahmoud_darwish.data.R
 import com.mahmoud_darwish.favorites.FavoritesDynamicFeatureModuleMainActivity
 import com.mahmoud_darwish.favorites.compose_nav_graph.FavoritesNavGraph
 import com.mahmoud_darwish.favorites.destinations.DetailsDestinationDestination
-import com.mahmoud_darwish.ui_core.ResourceComposable
+import com.mahmoud_darwish.ui_core.Composable
 import com.mahmoud_darwish.ui_core.StatelessBooksHorizontalLazyRow
 import com.mahmoud_darwish.ui_core.theme.MahmoudBooksTheme
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
@@ -33,7 +33,7 @@ fun FavoritesHome(
     navigator: DestinationsNavigator,
     viewModel: FavoritesViewModel = getViewModel()
 ) {
-    val favorites by viewModel.favorites.collectAsState(initial = CachedResource.Loading)
+    val favorites by viewModel.favoritesFlow.collectAsState(initial = CachedResource.Loading)
 
     MahmoudBooksTheme {
         Scaffold(
@@ -53,7 +53,7 @@ fun FavoritesHome(
             },
         ) {
 
-            favorites.ResourceComposable(modifier = Modifier.padding(it)) { list: List<Volume>, _ ->
+            favorites.Composable(modifier = Modifier.padding(it)) { list: List<Volume>, _ ->
                 Column(
                     verticalArrangement = Arrangement.Absolute.spacedBy(mediumPadding),
                     modifier = Modifier

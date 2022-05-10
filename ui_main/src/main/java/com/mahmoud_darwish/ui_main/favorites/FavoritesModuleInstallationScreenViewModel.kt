@@ -12,19 +12,21 @@ import org.koin.android.annotation.KoinViewModel
 
 
 @KoinViewModel
-class FavoritesModuleInstallationScreenViewModel constructor(
-    private val IModuleInstallationRepository: IModuleInstallationRepository
+class FavoritesModuleInstallationScreenViewModel(
+    private val moduleInstallationRepo: IModuleInstallationRepository
 ) : ViewModel() {
 
     init {
-        IModuleInstallationRepository.setModuleName(Constants.favoritesFeatureModuleName)
-        installModule() // TODO: remove to make the user install it manually
+        moduleInstallationRepo.setModuleName(Constants.favoritesFeatureModuleName)
+        // If you (the reviewer) want to see how the module would be installed by the user,
+        // remove the line below.
+        installModule()
     }
 
     val installationState: StateFlow<ModuleInstallationState> =
-        IModuleInstallationRepository.installationState
+        moduleInstallationRepo.installationStateFlow
 
-    fun installModule() = IModuleInstallationRepository.installModule()
+    fun installModule() = moduleInstallationRepo.installModuleAndInstallationStateUpdated()
 
     fun goToFavorites(context: Context) {
         val featuresLauncherActivityIntent = Intent(

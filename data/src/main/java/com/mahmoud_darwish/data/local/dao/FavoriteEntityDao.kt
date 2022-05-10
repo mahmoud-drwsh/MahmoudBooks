@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavoriteEntityDao {
     @Query("SELECT VolumeEntity.* FROM VolumeEntity join Favorite on Favorite.id = VolumeEntity.id")
-    fun getFavorites(): Flow<List<VolumeEntity>>
+    fun getFavoriteVolumes(): Flow<List<VolumeEntity>>
 
+    // replace is used here just to ensure the entry is inserted :)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(favorite: Favorite)
 
@@ -20,5 +21,5 @@ interface FavoriteEntityDao {
     suspend fun delete(id: String)
 
     @Query("SELECT EXISTS(SELECT 1 FROM Favorite WHERE id = :id)")
-    fun isFavorite(id: String): Flow<Boolean>
+    fun isVolumeFavorite(id: String): Flow<Boolean>
 }

@@ -8,8 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class FavoritesViewModel constructor(
-    repo: IFavoritesRepository
-) : ViewModel() {
-    val favorites: Flow<CachedResource<List<Volume>>> = repo.favorites
+class FavoritesViewModel(repo: IFavoritesRepository) : ViewModel() {
+    val favoritesFlow: Flow<CachedResource<List<Volume>>> = repo.favoritesFlow
 }

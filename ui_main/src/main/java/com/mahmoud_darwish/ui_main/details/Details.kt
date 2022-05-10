@@ -33,7 +33,7 @@ import com.mahmoud_darwish.core.model.Volume
 import com.mahmoud_darwish.core.util.CachedResource
 import com.mahmoud_darwish.data.R.string
 import com.mahmoud_darwish.ui_core.BookImage
-import com.mahmoud_darwish.ui_core.ResourceComposable
+import com.mahmoud_darwish.ui_core.Composable
 import com.mahmoud_darwish.ui_core.theme.mediumPadding
 import com.mahmoud_darwish.ui_core.util.priceFormatter
 import com.mahmoud_darwish.ui_main.compose_nav_graph.MainUiNavGraph
@@ -94,7 +94,7 @@ fun Details(
             CachedResource.Loading
         )
 
-        collectAsState.ResourceComposable { volume: Volume, _ ->
+        collectAsState.Composable { volume: Volume, _ ->
             Column(
                 Modifier
                     .padding(it)
