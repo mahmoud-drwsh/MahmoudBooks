@@ -19,7 +19,7 @@
     <string name="book_details">Book Details</string>
     <string name="navigate_back_icon_content_description">navigate back</string>
     <string name="toggle_bookmark_status_icon_content_description">toggle bookmark status</string>
-    <string name="results_source_message">Results responseSource: %s</string>
+    <string name="results_source_message">Results Source: %s</string>
     <string name="remote">Remote</string>
     <string name="cache">Cache</string>
     <string name="refresh">Refresh</string>
