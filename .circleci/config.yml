@@ -5,11 +5,11 @@ orbs:
  
 jobs:
   build:
-    executor: android/android-machine
+    executor: android/android
     steps:
       - checkout
       - restore_cache:
-          key: android-orb-v1-
+          key: android-orb-v1
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
