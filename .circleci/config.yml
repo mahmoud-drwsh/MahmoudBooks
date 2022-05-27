@@ -11,6 +11,11 @@ jobs:
       resource-class: xlarge
     steps:
       - checkout
+
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+
       - android/restore-gradle-cache
       - android/restore-build-cache
       - android/run-tests:
