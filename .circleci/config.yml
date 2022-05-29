@@ -43,6 +43,11 @@ jobs:
       resource-class: xlarge
     steps:
       - checkout
+      
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+
       - android/start-emulator-and-run-tests:
           test-command: ./gradlew connectedDebugAndroidTest
           system-image: << parameters.system-image >>
@@ -63,6 +68,11 @@ jobs:
       resource-class: xlarge
     steps:
       - checkout
+
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+
       - android/restore-gradle-cache
       - android/restore-build-cache
       - run:
@@ -76,10 +86,7 @@ workflows:
   test-and-build:
     jobs:
       - unit-test
-      - android/run-ui-tests:
-          filters:
-            branches:
-              only: main
+      - android/run-ui-tests
       - android-test:
           matrix:
             alias: android-test-all
@@ -89,14 +96,8 @@ workflows:
                 - system-images;android-29;google_apis;x86
                 - system-images;android-28;google_apis;x86
           name: android-test-<<matrix.system-image>>
-          filters:
-            branches:
-              only: main
       - release-build:
           requires:
             - unit-test
             - android-test-all
-          filters:
-            branches:
-              only: main
 
