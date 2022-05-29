@@ -43,6 +43,11 @@ jobs:
       resource-class: xlarge
     steps:
       - checkout
+      
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+
       - android/start-emulator-and-run-tests:
           test-command: ./gradlew connectedDebugAndroidTest
           system-image: << parameters.system-image >>
@@ -63,6 +68,11 @@ jobs:
       resource-class: xlarge
     steps:
       - checkout
+
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+
       - android/restore-gradle-cache
       - android/restore-build-cache
       - run:
