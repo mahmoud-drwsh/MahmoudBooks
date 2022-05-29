@@ -1,14 +1,15 @@
-version: 2.1
+# .circleci/config.yaml
+version: 2.1 # to enable orb usage, you must be using circleci 2.1
+# Declare the orbs you wish to use.
+# Android orb docs are available here:  https://circleci.com/developer/orbs/orb/circleci/android
 orbs:
-  android: circleci/android@2.0.3
-jobs:
-  example-job:
-    docker:
-      # replace with your preferred image
-      - image: cimg/android
-    steps:
-      - android/start-emulator-and-run-tests
+  android: circleci/android@1.0
+  
 workflows:
-  example-workflow:
+  test:
     jobs:
-      - example-job
+      # This job uses the Android machine image by default
+      - android/run-ui-tests:
+          # Use pre-steps and post-steps if necessary
+          # to execute custom steps before and afer any of the built-in steps
+          system-image: system-images;android-29;default;x86
