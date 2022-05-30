@@ -87,8 +87,8 @@ jobs:
 workflows:
   test-and-build:
     jobs:
-      - unit-test
       - android/run-ui-tests
+
       - android-test:
           matrix:
             alias: android-test-all
@@ -96,8 +96,5 @@ workflows:
               system-image:
                 - system-images;android-30;google_apis;x86
           name: android-test-<<matrix.system-image>>
-      - debug-build:
-          requires:
-            - unit-test
-            - android-test-all
 
+      - debug-build
