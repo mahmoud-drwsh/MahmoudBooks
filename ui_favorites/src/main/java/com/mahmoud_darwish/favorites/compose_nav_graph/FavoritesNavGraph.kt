@@ -7,5 +7,7 @@ import com.ramcosta.composedestinations.annotation.NavGraph
  * */
 @NavGraph
 annotation class FavoritesNavGraph(
+    @Suppress("unused")
+    // this will be used by the code-generating library
     val start: Boolean = false
 )
