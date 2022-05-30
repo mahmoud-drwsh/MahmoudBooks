@@ -15,7 +15,7 @@ This app is a partial clone of Google books. The reason for that is the goal of 
    For CI, I used CircleCi. The workflow has two jobs, one for the android instrumentation tests, and another for building the APK file and uploading it to as an artifact. 
    The app has two instrumentation tests in the data module and they are the ones run by CircleCi.
    This link can be used to view the CircleCI project: https://app.circleci.com/pipelines/github/mahmoud-drwsh/MahmoudBooks?invite=true
-   And the project is available on GitHub as well and can be accessed by anyone on GitHub, and here's the link: https://github.com/mahmoud-drwsh/MahmoudBooks
+   The project is available on GitHub as well and can be accessed by anyone on GitHub, and here's the link: https://github.com/mahmoud-drwsh/MahmoudBooks
 2. LeakCanary
    I have added LeakCanary to this project and when the app is run, not issues are shown.
 3. Performance-related issues
