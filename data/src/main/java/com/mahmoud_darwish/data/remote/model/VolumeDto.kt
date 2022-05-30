@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Even though there are many unused properties here, I left them purposefully so that later I would have them when needed.
  * */
+@Suppress("SpellCheckingInspection")
 data class VolumeDto(
     @SerializedName("id")
     val id: String = "",
