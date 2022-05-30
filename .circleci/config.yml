@@ -81,6 +81,8 @@ jobs:
             ./gradlew assembleDebug
       - store_artifacts:
           path: app/build/outputs/apk/release/app-debug.apk
+      - store_artifacts:
+          path: ui_favorites/build/outputs/apk/debug/ui_favorites-debug.apk
 
 workflows:
   test-and-build:
