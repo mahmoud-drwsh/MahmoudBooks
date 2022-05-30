@@ -62,7 +62,7 @@ jobs:
       - store_artifacts:
           path: ~/test-results/junit
 
-  release-build:
+  debug-build:
     executor:
       name: android/android-machine
       resource-class: xlarge
@@ -76,11 +76,11 @@ jobs:
       - android/restore-gradle-cache
       - android/restore-build-cache
       - run:
-          name: Assemble release build
+          name: Assemble debug build
           command: |
-            ./gradlew assembleRelease
+            ./gradlew assembleDebug
       - store_artifacts:
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          path: app/build/outputs/apk/release/app-debug.apk
 
 workflows:
   test-and-build:
@@ -94,7 +94,7 @@ workflows:
               system-image:
                 - system-images;android-30;google_apis;x86
           name: android-test-<<matrix.system-image>>
-      - release-build:
+      - debug-build:
           requires:
             - unit-test
             - android-test-all
