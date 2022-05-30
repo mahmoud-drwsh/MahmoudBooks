@@ -11,6 +11,8 @@ import com.mahmoud_darwish.data.local.model.Favorite
 import com.mahmoud_darwish.data.local.model.VolumeEntity
 import com.mahmoud_darwish.data.local.util.StringListConverters
 import com.mahmoud_darwish.data.local.util.databaseFileName
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 
 
 @Database(entities = [VolumeEntity::class, Favorite::class], version = 1, exportSchema = false)
@@ -24,6 +26,18 @@ abstract class VolumeRoomDatabase : RoomDatabase() {
 /**
  * This will be used by the dependency injection framework to generate a singleton instance
  * */
-fun getVolumeRoomDatabaseInstance(context: Context): VolumeRoomDatabase = Room
-    .databaseBuilder(context, VolumeRoomDatabase::class.java, databaseFileName)
-    .build()
+fun getVolumeRoomDatabaseInstance(context: Context): VolumeRoomDatabase {
+    val passphrase = "Mahmoud Darwish"
+    val passphraseCharArray: CharArray = passphrase.toCharArray()
+    val bytes: ByteArray = SQLiteDatabase.getBytes(passphraseCharArray)
+    val supportFactory = SupportFactory(bytes)
+
+    return Room
+        .databaseBuilder(
+            context,
+            VolumeRoomDatabase::class.java,
+            databaseFileName
+        )
+        .openHelperFactory(supportFactory)
+        .build()
+}
