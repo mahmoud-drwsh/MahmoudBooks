@@ -1,20 +1,46 @@
 # Important Note
 
-I used {Android Studio Chipmunk | 2021.2.1} for building and testing this app. Please use the same version to build the app and test it.
+I used {Android Studio Electric Eel | 2022.1.1 Canary 2} for building and testing this app. Please use the same version to build the app and test it.
 
 AGP version     = 7.2.0
 Gradle version  = 7.4.2
 
 # About The App
 
-This app is a partial clone of Google books. The reason for that is the goal of this submission is
-showing that we understand the concepts mentioned in the class up to the respective submission.
+This app is a partial clone of Google books. The reason for that is the goal of this submission is showing that we understand the concepts mentioned in the class up to the respective submission.
+
+# Submission 2 requirements
+
+1. CI application
+   For CI, I used CircleCi. The workflow has two jobs, one for the android instrumentation tests, and another for building the APK file and uploading it to as an artifact. 
+   The app has two instrumentation tests in the data module and they are the ones run by CircleCi.
+   This link can be used to view the CircleCI project: https://app.circleci.com/pipelines/github/mahmoud-drwsh/MahmoudBooks?invite=true
+2. LeakCanary
+   I have added LeakCanary to this project and when the app is run, not issues are shown.
+3. Performance-related issues
+   There are no problems when running the Android performance code inspection.
+4. Obfuscation
+   As an added point, I enabled obfuscation for debug builds to ensure that there are no problems related to obfuscation.
+5. Encryption
+   The app uses SQLiteCipher for encrypting the SQLite database.
+6. Certificate pinning
+   The technique applied in this app is Hash Pinning.
+   In the data module, in the kotlin file named GoogleBooksApi.kt, more specifically in the function body of getBooksServiceInstance, declared therein, you'll find how Hash Pinning was applied with Retrofit and a provided OkHttpClient there.
+7. All the previous features are maintained in this submission.
+
+# Applied suggestions
+
+1. The UI is declared in way that makes it easy to understand & look at; proper margins and dimensions were applied to the UI elements.
+2. The code in this project differs from the code introduced in this course. And Libraries like Jetpack Compose, and Compose Destinations have been used in this project and some weren't taught in this course, and others were used in ways that were not explicitly explained in the course.
+3. The app has instrumentation tests to ensure that the data received from the server is properly processed.
+4. The app has much more features that the 3 main ones.
+5. An added aspect of security this app applies that is not explicitly mentioned in the course is keeping the dependencies used in the project up to date.
 
 # Architecture
 
 - The app has a cache layer to help with reducing the number of requests to the server made. 
 - The app applies the MVVM architecture pattern. 
-- There are data models for the domain, data, and UI layers each, with each being having a suffix denoting the layer to which it belongs except for the model for the domain layer.
+- There are data models for the domain, data, and UI layers each, with each being having a suffix denoting the layer to which it belongs except for the model for the domain layer that is called just core.
 - The principle of data flowing up and events flowing down is followed closely in this implementation of the app.
 - Flows are extensively used to apply the principle of reactive programming.
 - Koin is used for dependency injection.
@@ -27,11 +53,11 @@ https://www.googleapis.com/books/v1/volumes
 
 # Tests
 
-The app has two tests to ensure that the data returned by the Google Books API is what is expected.
+The app has two tests to ensure that the data returned by the Google Books API is as expected.
 
 # Code Comments
 
-I have written comments where I felt confusion might arise or of lack of clarity might be present. I have tried my best to use expressive names which I have found reduces the need for extensive commenting.
+I have written comments where I felt confusion might arise or lack of clarity might be. I have tried my best to use expressive names which I have found something that reduces the need for extensive commenting.
 
 # Internationalization
 
@@ -44,6 +70,7 @@ I have tried to my best to make this code easily prepared for being internationa
 3. Adding books to the list of favorites
 4. Removing books from the list of favorites
 5. Search results caching.
+6. Caching layer that makes the app usable in cases where previous search results satisfy the searches done when the phone is disconnected.
 
 # User requirements
 
@@ -77,7 +104,7 @@ The app has the following modules:
 - The core module works as an added abstraction layer between the presentation and data layers.
 - The data module responsible for everything to deal with data.
 - The ui_core layer which contains various reusable Composables and contains the string resources used in the UI.
-- The main_ui module is responsible for the UI of the various screens needed for running the app.
+- The ui_main module is responsible for the UI of the various screens needed for running the app.
 - The ui_favorites dynamic feature module which contains the code for showing the list of favorite books.
 
 ## The libraries
@@ -91,3 +118,4 @@ The app has the following modules:
 - Koin. https://insert-koin.io
 - Compose Destinations. The docs: https://composedestinations.rafaelcosta.xyz
 - Landscapist Glide. https://github.com/skydoves/landscapist
+- Many more...
