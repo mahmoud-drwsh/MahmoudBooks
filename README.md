@@ -50,7 +50,7 @@ I have tried to my best to make this code easily prepared for being internationa
 ## On the home screen, the user should be shown:
 
 1. A search bar and the results below it.
-2. The responseSource of the data shown.
+2. The source of the data shown.
     - The results are loaded from the cache by default unless no results are found in the cache.
 3. A button to force data to be fetched from the live server.
 
