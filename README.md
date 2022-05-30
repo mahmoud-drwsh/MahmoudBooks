@@ -7,17 +7,17 @@ Gradle version  = 7.4.2
 
 # About The App
 
-This app is a partial clone of Google books. The reason for that is the goal of this submission is showing that we understand the concepts mentioned in the class up to the respective submission.
+This app is a partial clone of Google books. The reason for that is that the goal of this submission is showing that we understand the concepts mentioned in the class up to the respective submission.
 
 # Submission 2 requirements
 
 1. CI application
-   For CI, I used CircleCi. The workflow has two jobs, one for the android instrumentation tests, and another for building the APK file and uploading it to as an artifact. 
+   For CI, I used CircleCI. The workflow has two jobs, one for the Android instrumentation tests, and another for building the APK file and uploading it as an artifact. 
    The app has two instrumentation tests in the data module and they are the ones run by CircleCi.
    This link can be used to view the CircleCI project: https://app.circleci.com/pipelines/github/mahmoud-drwsh/MahmoudBooks?invite=true
    The project is available on GitHub as well and can be accessed by anyone on GitHub, and here's the link: https://github.com/mahmoud-drwsh/MahmoudBooks
 2. LeakCanary
-   I have added LeakCanary to this project and when the app is run, not issues are shown.
+   I have added LeakCanary to this project and when the app is run, no issues are shown.
 3. Performance-related issues
    There are no problems when running the Android performance code inspection.
 4. Obfuscation
@@ -26,22 +26,22 @@ This app is a partial clone of Google books. The reason for that is the goal of 
    The app uses SQLiteCipher for encrypting the SQLite database.
 6. Certificate pinning
    The technique applied in this app is Hash Pinning.
-   In the data module, in the kotlin file named GoogleBooksApi.kt, more specifically in the function body of getBooksServiceInstance, declared therein, you'll find how Hash Pinning was applied with Retrofit and a provided OkHttpClient there.
+   In the data module, in the Kotlin file named GoogleBooksApi.kt, more specifically in the function body of getBooksServiceInstance, declared therein, you'll find how Hash Pinning was applied with Retrofit and a provided OkHttpClient there.
 7. All the previous features are maintained in this submission.
 
 # Applied suggestions
 
-1. The UI is declared in way that makes it easy to understand & look at; proper margins and dimensions were applied to the UI elements.
+1. The UI is declared in a way that makes it easy to understand & look at; proper margins and dimensions were applied to the UI elements.
 2. The code in this project differs from the code introduced in this course. And Libraries like Jetpack Compose, and Compose Destinations have been used in this project and some weren't taught in this course, and others were used in ways that were not explicitly explained in the course.
 3. The app has instrumentation tests to ensure that the data received from the server is properly processed.
-4. The app has much more features that the 3 main ones.
+4. The app has much more features than the 3 main ones.
 5. An added aspect of security this app applies that is not explicitly mentioned in the course is keeping the dependencies used in the project up to date.
 
 # Architecture
 
 - The app has a cache layer to help with reducing the number of requests to the server made. 
 - The app applies the MVVM architecture pattern. 
-- There are data models for the domain, data, and UI layers each, with each being having a suffix denoting the layer to which it belongs except for the model for the domain layer that is called just core.
+- There are data models for the domain, data, and UI layers each, with each being having a suffix denoting the layer to which it belongs, except for the model for the domain layer that is called just core.
 - The principle of data flowing up and events flowing down is followed closely in this implementation of the app.
 - Flows are extensively used to apply the principle of reactive programming.
 - Koin is used for dependency injection.
@@ -103,7 +103,7 @@ The app has the following modules:
 
 - The app module connects everything else to produce a working app.
 - The core module works as an added abstraction layer between the presentation and data layers.
-- The data module responsible for everything to deal with data.
+- The data module is responsible for everything to deal with data.
 - The ui_core layer which contains various reusable Composables and contains the string resources used in the UI.
 - The ui_main module is responsible for the UI of the various screens needed for running the app.
 - The ui_favorites dynamic feature module which contains the code for showing the list of favorite books.
