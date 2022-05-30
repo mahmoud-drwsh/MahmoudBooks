@@ -44,6 +44,7 @@ class RemoteDataResponseSourceTest {
         /*
         The following books will be requested from the API and will be ensured that the titles match the ID'AppIoCoroutineScope
         * */
+        @Suppress("SpellCheckingInspection")
         val books: Map<String, String> = mapOf(
             /*      ID               Title       */
             "qtcIkAEACAAJ" to "Kotlin in Action",
